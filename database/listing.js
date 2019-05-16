@@ -31,6 +31,10 @@ const Listing = mongoose.model('Listing', {
     type: Number,
     default: 30,
   },
+  finalDay: {
+    type: Number,
+    // default??
+  },
   baseRate: {
     type: Number,
     required: true,
