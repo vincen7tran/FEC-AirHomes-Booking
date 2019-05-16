@@ -24,5 +24,7 @@ module.exports = {
       jsx: 'always',
     },
     'no-console': 'off',
+    'no-plusplus': 'off',
+    'radix': 'as-needed',
   },
 };
