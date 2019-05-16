@@ -1,10 +1,13 @@
 const express = require('express');
-const bodyParser =  require('body-parser');
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(__dirname + '/../public/dist'));
+const distDir = path.join(__dirname, '/../public/dist');
+
+app.use(express.static(distDir));
 
 app.use(bodyParser.json());
 

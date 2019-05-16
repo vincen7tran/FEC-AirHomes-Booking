@@ -1,10 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-const App = () => {
-  return (
-    <div>TEST</div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { };
+  }
+
+  render() {
+    return (
+      <div>TEST</div>
+    );
+  }
 }
 
 export default App;
