@@ -4,6 +4,7 @@ const Listing = mongoose.model('Listing', {
   listingId: {
     type: Number,
     required: true,
+    unique: true,
     validate(val) {
       if (val < 0) throw new Error('Listing ID must be positive.');
     },
@@ -32,7 +33,7 @@ const Listing = mongoose.model('Listing', {
     default: 30,
   },
   finalDay: {
-    type: Number,
+    type: String,
     // default??
   },
   baseRate: {
