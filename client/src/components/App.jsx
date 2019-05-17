@@ -9,11 +9,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing()
+    this.getListing(2766)
       .then(({ data }) => this.setState({ listing: data[0] }));
   }
 
-  getListing = listingId => axios.get('/listing', { params: { listingId: 2766 } });
+  getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
     return (
