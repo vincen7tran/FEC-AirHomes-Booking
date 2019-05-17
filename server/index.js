@@ -13,11 +13,13 @@ app.use(express.static(distDir));
 
 app.use(bodyParser.json());
 
-app.get('/listings', async (req, res) => {
+app.get('/listing', async (req, res) => {
+  const { listingId } = req.query;
+
   try {
-    const listings = await Listing.find({});
-    res.send(listings);
-  } catch(e) {
+    const listing = await Listing.find({ listingId });
+    res.send(listing);
+  } catch (e) {
     res.status(500).send(e);
   }
 });
