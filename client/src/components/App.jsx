@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Booking from './Booking.jsx';
 
 const body = {
   width: '400px',
@@ -73,6 +74,7 @@ class App extends React.Component {
                 <span style={font12}>{listing.numberOfRatings}</span>
               </div>
             </div>
+            <Booking />
           </div>
         </div>
       </div>
