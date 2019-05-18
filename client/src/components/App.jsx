@@ -1,6 +1,25 @@
 import React from 'react';
 import axios from 'axios';
 
+const cardStyle = {
+  paddingLeft: '24px',
+  paddingRight: '24px',
+  border: '1px solid #e4e4e4',
+  backgroundColor: '#ffffff',
+  width: '326px',
+  height: '353px',
+};
+
+const contentContainerStyle = {
+  marginTop: '16px',
+  marginBottom: '24px',
+};
+
+const bodyStyle = {
+  width: '400px',
+  margin: '0 auto',
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +36,11 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>TEST</div>
+      <div style={bodyStyle}>
+        <div style={cardStyle}>
+          <div style={contentContainerStyle}>TEST</div>
+        </div>
+      </div>
     );
   }
 }
