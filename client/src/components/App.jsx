@@ -1,7 +1,15 @@
 import React from 'react';
 import axios from 'axios';
+import Booking from './Booking.jsx';
 
-const cardStyle = {
+const body = {
+  width: '400px',
+  margin: '0 auto',
+  fontFamily: 'Arial, Helvetica, sans-serif',
+  color: '#484848',
+};
+
+const card = {
   paddingLeft: '24px',
   paddingRight: '24px',
   border: '1px solid #e4e4e4',
@@ -10,14 +18,29 @@ const cardStyle = {
   height: '353px',
 };
 
-const contentContainerStyle = {
+const contentContainer = {
   marginTop: '16px',
   marginBottom: '24px',
 };
 
-const bodyStyle = {
-  width: '400px',
-  margin: '0 auto',
+const priceAndRating = {
+  borderBottom: '1px solid #e4e4e4',
+};
+
+const priceContainer = {
+
+};
+
+const reviewContainer = {
+
+};
+
+const baseRate = {
+  fontSize: '22px',
+};
+
+const font12 = {
+  fontSize: '12px',
 };
 
 class App extends React.Component {
@@ -35,10 +58,24 @@ class App extends React.Component {
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
+    const { listing } = this.state;
+
     return (
-      <div style={bodyStyle}>
-        <div style={cardStyle}>
-          <div style={contentContainerStyle}>TEST</div>
+      <div style={body}>
+        <div style={card}>
+          <div style={contentContainer}>
+            <div style={priceAndRating}>
+              <div style={priceContainer}>
+                <span style={baseRate}>{`$${listing.baseRate}`}</span>
+                <span style={font12}>per night</span>
+              </div>
+              <div style={reviewContainer}>
+                <span>{listing.averageRating}</span>
+                <span style={font12}>{listing.numberOfRatings}</span>
+              </div>
+            </div>
+            <Booking />
+          </div>
         </div>
       </div>
     );
