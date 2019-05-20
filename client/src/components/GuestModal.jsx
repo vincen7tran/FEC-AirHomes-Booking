@@ -172,7 +172,7 @@ class GuestModal extends React.Component {
     super(props);
 
     this.state = {
-      adults: 1, children: 0, infants: 0,
+      adults: 1, children: 0, infants: 0, guests: 1,
     };
   }
 
@@ -188,6 +188,25 @@ class GuestModal extends React.Component {
     this.props.closeModal();
   }
 
+  handleAddButton = (e) => {
+    const name = e.target.getAttribute('name');
+    console.log(e.target, this.state[name]);
+    this.setState({ [name]: ++this.state[name] },
+      () => {
+        const { adults, children } = this.state;
+        this.setState({ guests: adults + children });
+      });
+  }
+
+  handleSubtractButton = (e) => {
+    const name = e.target.getAttribute('name');
+    this.setState({ [name]: --this.state[name] },
+      () => {
+        const { adults, children } = this.state;
+        this.setState({ guests: adults + children });
+      });
+  }
+
   render() {
     const { adults, children, infants } = this.state;
 
@@ -201,9 +220,9 @@ class GuestModal extends React.Component {
                 <div style={optionButtonContainer}>
                   <div style={optionButtonTable}>
                     <div style={minusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="adults" onClick={this.handleSubtractButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false" style={svgOptions}><rect height="2" rx="1" width="12" x="6" y="11" /></svg>
+                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="adults" focusable="false" style={svgOptions}><rect name="adults" height="2" rx="1" width="12" x="6" y="11" /></svg>
                         </span>
                       </button>
                     </div>
@@ -211,11 +230,11 @@ class GuestModal extends React.Component {
                       <div style={countText}>{adults}</div>
                     </div>
                     <div style={plusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="adults" onClick={this.handleAddButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" style={svgOptions}>
-                            <rect height="2" rx="1" width="12" x="6" y="11" />
-                            <rect height="12" rx="1" width="2" x="11" y="6" />
+                          <svg viewBox="0 0 24 24" role="img" aria-label="add" name="adults" focusable="false" style={svgOptions}>
+                            <rect name="adults" height="2" rx="1" width="12" x="6" y="11" />
+                            <rect name="adults" height="12" rx="1" width="2" x="11" y="6" />
                           </svg>
                         </span>
                       </button>
@@ -235,9 +254,9 @@ class GuestModal extends React.Component {
                 <div style={optionButtonContainer}>
                   <div style={optionButtonTable}>
                     <div style={minusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="children" onClick={this.handleSubtractButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false" style={svgOptions}><rect height="2" rx="1" width="12" x="6" y="11" /></svg>
+                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="children" focusable="false" style={svgOptions}><rect name="children" height="2" rx="1" width="12" x="6" y="11" /></svg>
                         </span>
                       </button>
                     </div>
@@ -245,11 +264,11 @@ class GuestModal extends React.Component {
                       <div style={countText}>{children}</div>
                     </div>
                     <div style={plusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="children" onClick={this.handleAddButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" style={svgOptions}>
-                            <rect height="2" rx="1" width="12" x="6" y="11" />
-                            <rect height="12" rx="1" width="2" x="11" y="6" />
+                          <svg viewBox="0 0 24 24" role="img" aria-label="add" name="children" focusable="false" style={svgOptions}>
+                            <rect name="children" height="2" rx="1" width="12" x="6" y="11" />
+                            <rect name="children" height="12" rx="1" width="2" x="11" y="6" />
                           </svg>
                         </span>
                       </button>
@@ -269,9 +288,9 @@ class GuestModal extends React.Component {
                 <div style={optionButtonContainer}>
                   <div style={optionButtonTable}>
                     <div style={minusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="infants" onClick={this.handleSubtractButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" focusable="false" style={svgOptions}><rect height="2" rx="1" width="12" x="6" y="11" /></svg>
+                          <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="infants" focusable="false" style={svgOptions}><rect name="infants" height="2" rx="1" width="12" x="6" y="11" /></svg>
                         </span>
                       </button>
                     </div>
@@ -279,11 +298,11 @@ class GuestModal extends React.Component {
                       <div style={countText}>{infants}</div>
                     </div>
                     <div style={plusCell}>
-                      <button type="button" style={optionButton}>
+                      <button type="button" style={optionButton} name="infants" onClick={this.handleAddButton}>
                         <span style={buttonSpan}>
-                          <svg viewBox="0 0 24 24" role="img" aria-label="add" focusable="false" style={svgOptions}>
-                            <rect height="2" rx="1" width="12" x="6" y="11" />
-                            <rect height="12" rx="1" width="2" x="11" y="6" />
+                          <svg viewBox="0 0 24 24" role="img" aria-label="add" name="infants" focusable="false" style={svgOptions}>
+                            <rect name="infants" height="2" rx="1" width="12" x="6" y="11" />
+                            <rect name="infants" height="12" rx="1" width="2" x="11" y="6" />
                           </svg>
                         </span>
                       </button>
