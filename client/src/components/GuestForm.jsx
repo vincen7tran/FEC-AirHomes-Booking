@@ -98,7 +98,7 @@ const svgStyle = {
 class GuestForm extends React.Component {
   constructor(props) {
     super(props);
-
+    const { maxGuests } = props;
     this.state = {
       expand: false, adultCount: 1, childCount: 0, infantCount: 0, guestCount: 1,
     };

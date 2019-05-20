@@ -20,6 +20,10 @@ const Listing = mongoose.model('Listing', {
     type: Number,
     required: true,
   },
+  maxGuests: {
+    type: Number,
+    required: true,
+  },
   bookings: {
     type: Array,
     required: true,

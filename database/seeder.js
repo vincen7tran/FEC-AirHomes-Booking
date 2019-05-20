@@ -9,6 +9,7 @@ const seed = async () => {
     const listingId = faker.random.number(10000);
     const averageRating = faker.random.number(50) / 10;
     const numberOfRatings = faker.random.number({ min: 1, max: 1000 });
+    const maxGuests = faker.random.number({ min: 2, max: 20 });
     const minNights = faker.random.number({ min: 1, max: 7 });
     const baseRate = faker.random.number({ min: 1, max: 5000 });
     const maxNights = faker.random.boolean() ? faker.random.number({ min: minNights, max: 30 }) : 30;
@@ -38,6 +39,7 @@ const seed = async () => {
       listingId,
       averageRating,
       numberOfRatings,
+      maxGuests,
       bookings,
       finalDay,
       minNights,
@@ -51,7 +53,7 @@ const seed = async () => {
     try {
       const listing = await Listing.findOneAndUpdate({ listingId }, listingObj, { upsert: true, new: true});
       console.log('Updated', listing);
-    } catch(e) {
+    } catch (e) {
       console.log('ERROR', e);
     }
   }
