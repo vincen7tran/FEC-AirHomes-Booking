@@ -1,6 +1,5 @@
 import React from 'react';
 import GuestModal from './GuestModal.jsx';
-import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 const guestContainer = {
   marginBottom: '16px',
