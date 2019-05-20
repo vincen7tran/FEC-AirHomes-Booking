@@ -98,16 +98,55 @@ const svgStyle = {
 class GuestForm extends React.Component {
   constructor(props) {
     super(props);
+    const { maxGuests } = props;
+    this.state = {
+      expand: false, adultCount: 1, childCount: 0, infantCount: 0, guestCount: 1,
+    };
+  }
 
-    this.state = { expand: false };
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  handleMouseEnter = (e) => {
+    e.target.style.textDecoration = 'underline';
+  }
+
+  handleMouseLeave = (e) => {
+    e.target.style.textDecoration = 'none';
+  }
+
+  handleAddButton = (e) => {
+    const name = e.target.getAttribute('name');
+    this.setState(prevState => ({ [name]: prevState[name] + 1 }),
+      () => {
+        const { adultCount, childCount } = this.state;
+        this.setState({ guestCount: adultCount + childCount });
+      });
+  }
+
+  handleSubtractButton = (e) => {
+    const name = e.target.getAttribute('name');
+    this.setState(prevState => ({ [name]: prevState[name] - 1 }),
+      () => {
+        const { adultCount, childCount } = this.state;
+        this.setState({ guestCount: adultCount + childCount });
+      });
   }
 
   expandModal = () => this.setState({ expand: true });
 
+  handleClick = (e) => {
+    if (!this.node.contains(e.target)) this.closeModal();
+  }
+
   closeModal = () => this.setState({ expand: false });
 
+
   render() {
-    const { expand } = this.state;
+    const {
+      expand, adultCount, childCount, infantCount,
+    } = this.state;
 
     return (
       <div>
@@ -131,7 +170,9 @@ class GuestForm extends React.Component {
                 </div>
               </div>
             </button>
-            {expand && <GuestModal closeModal={this.closeModal} />}
+            <div ref={(node) => { this.node = node; }}>
+              {expand && <GuestModal expandModal={this.expandModal} closeModal={this.closeModal} adultCount={adultCount} childCount={childCount} infantCount={infantCount} handleAddButton={this.handleAddButton} handleSubtractButton={this.handleSubtractButton} handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} />}
+            </div>
           </div>
         </div>
       </div>
