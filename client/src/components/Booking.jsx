@@ -3,7 +3,7 @@ import CheckingForm from './CheckingForm.jsx';
 import GuestForm from './GuestForm.jsx';
 
 const bookingForm = {
-
+  boxSizing: 'border-box',
 };
 
 const buttonDiv = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import GuestModal from './GuestModal.jsx';
 
 const guestContainer = {
   marginBottom: '16px',
@@ -26,6 +27,20 @@ const guestButton = {
   borderWidth: '1px',
   borderStyle: 'solid',
   borderColor: '#ebebeb',
+  cursor: 'pointer',
+};
+
+const expandedButton = {
+  textAlign: 'left',
+  lineHeight: 'normal',
+  display: 'block',
+  width: '100%',
+  borderRadius: '2px',
+  padding: '8px',
+  borderWidth: '1px 1px 2px',
+  borderStyle: 'solid',
+  borderColor: '#ebebeb #ebebeb #008489',
+  borderBottom: '2px solid #008489',
 };
 
 const buttonMargin = {
@@ -59,6 +74,15 @@ const guestLabel = {
   padding: '0',
 };
 
+const expandedSpan = {
+  backgroundColor: '#99ede6',
+  borderColor: '#99ede6',
+  color: '#007a87',
+  borderRadius: '3px',
+  cursor: 'pointer',
+  padding: '0.25em 0.5em',
+};
+
 const svgCell = {
   display: 'table-cell',
   verticalAlign: 'middle',
@@ -75,30 +99,40 @@ class GuestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { };
+    this.state = { expand: false };
   }
 
+  expandModal = () => this.setState({ expand: true });
+
+  closeModal = () => this.setState({ expand: false });
+
   render() {
+    const { expand } = this.state;
+
     return (
-      <div style={guestContainer}>
-        <span style={font12}>Guests</span>
-        <div style={buttonContainer}>
-          <button style={guestButton} type="button">
-            <div style={buttonMargin}>
-              <div style={buttonDiv}>
-                <div style={buttonTable}>
-                  <div style={guestCell}>
-                    <div style={guestLabel}>
-                      <span>1 guest</span>
+      <div>
+        <div style={guestContainer}>
+          <span style={font12}>Guests</span>
+          <div style={buttonContainer}>
+            <button style={expand ? expandedButton : guestButton} type="button" onClick={this.expandModal}>
+              <div style={buttonMargin}>
+                <div style={buttonDiv}>
+                  <div style={buttonTable}>
+                    <div style={guestCell}>
+                      <div style={guestLabel}>
+                        <span style={expand ? expandedSpan : {}}>1 guest</span>
+                      </div>
                     </div>
-                  </div>
-                  <div style={svgCell}>
-                    <svg viewBox="0 0 18 18" role="presentation" aria-hidden="true" focusable="false" style={svgStyle}><path d="m16.29 4.3a1 1 0 1 1 1.41 1.42l-8 8a1 1 0 0 1 -1.41 0l-8-8a1 1 0 1 1 1.41-1.42l7.29 7.29z" fillRule="evenodd" /></svg>
+                    <div style={svgCell}>
+                      {!expand && <svg viewBox="0 0 18 18" role="presentation" aria-hidden="true" focusable="false" style={svgStyle}><path d="m16.29 4.3a1 1 0 1 1 1.41 1.42l-8 8a1 1 0 0 1 -1.41 0l-8-8a1 1 0 1 1 1.41-1.42l7.29 7.29z" fillRule="evenodd" /></svg>}
+                      {expand && <svg viewBox="0 0 18 18" role="presentation" aria-hidden="true" focusable="false" style={svgStyle}><path d="m1.71 13.71a1 1 0 1 1 -1.42-1.42l8-8a1 1 0 0 1 1.41 0l8 8a1 1 0 1 1 -1.41 1.42l-7.29-7.29z" fillRule="evenodd" /></svg>}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </button>
+            </button>
+            {expand && <GuestModal closeModal={this.closeModal} />}
+          </div>
         </div>
       </div>
     );

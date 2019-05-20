@@ -37,6 +37,8 @@ const reviewContainer = {
 
 const baseRate = {
   fontSize: '22px',
+  fontWeight: '800',
+  lineHeight: '1.444444em',
 };
 
 const font12 = {
