@@ -57,7 +57,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing(7001)
+    this.getListing(2)
       .then(({ data }) => this.setState({ listing: data[0] }));
   }
 
