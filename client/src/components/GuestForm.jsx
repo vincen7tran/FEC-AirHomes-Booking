@@ -119,7 +119,6 @@ class GuestForm extends React.Component {
 
   handleAddButton = (e) => {
     const name = e.target.getAttribute('name');
-    console.log(e.target, this.state[name]);
     this.setState({ [name]: ++this.state[name] },
       () => {
         const { adultCount, childCount } = this.state;
@@ -139,8 +138,6 @@ class GuestForm extends React.Component {
   expandModal = () => this.setState({ expand: true });
 
   handleClick = (e) => {
-    console.log('1', 'click');
-    console.log('target', e.target);
     if (!this.node.contains(e.target)) this.closeModal();
   }
 
