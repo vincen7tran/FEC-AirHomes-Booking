@@ -6,7 +6,8 @@ require('./db');
 
 const seed = async () => {
   for (let i = 0; i < 200; i++) {
-    const listingId = faker.random.number(10000);
+    const listingId = i + 1;
+    // const listingId = faker.random.number(10000);
     const averageRating = faker.random.number(50) / 10;
     const numberOfRatings = faker.random.number({ min: 1, max: 1000 });
     const maxGuests = faker.random.number({ min: 2, max: 20 });
