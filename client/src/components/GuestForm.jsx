@@ -102,9 +102,9 @@ class GuestForm extends React.Component {
     this.state = { expand: false };
   }
 
-  expandGuest = () => {
-    this.setState({ expand: true });
-  }
+  expandModal = () => this.setState({ expand: true });
+
+  closeModal = () => this.setState({ expand: false });
 
   render() {
     const { expand } = this.state;
@@ -114,7 +114,7 @@ class GuestForm extends React.Component {
         <div style={guestContainer}>
           <span style={font12}>Guests</span>
           <div style={buttonContainer}>
-            <button style={expand ? expandedButton : guestButton} type="button" onClick={this.expandGuest}>
+            <button style={expand ? expandedButton : guestButton} type="button" onClick={this.expandModal}>
               <div style={buttonMargin}>
                 <div style={buttonDiv}>
                   <div style={buttonTable}>
@@ -131,7 +131,7 @@ class GuestForm extends React.Component {
                 </div>
               </div>
             </button>
-            {expand && <GuestModal />}
+            {expand && <GuestModal closeModal={this.closeModal} />}
           </div>
         </div>
       </div>
