@@ -118,7 +118,7 @@ class GuestForm extends React.Component {
 
   handleAddButton = (e) => {
     const name = e.target.getAttribute('name');
-    this.setState({ [name]: ++this.state[name] },
+    this.setState(prevState => ({ [name]: prevState[name] + 1 }),
       () => {
         const { adultCount, childCount } = this.state;
         this.setState({ guestCount: adultCount + childCount });
@@ -127,7 +127,7 @@ class GuestForm extends React.Component {
 
   handleSubtractButton = (e) => {
     const name = e.target.getAttribute('name');
-    this.setState({ [name]: --this.state[name] },
+    this.setState(prevState => ({ [name]: prevState[name] - 1 }),
       () => {
         const { adultCount, childCount } = this.state;
         this.setState({ guestCount: adultCount + childCount });
