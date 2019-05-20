@@ -1,5 +1,6 @@
 import React from 'react';
 import GuestModal from './GuestModal.jsx';
+import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 const guestContainer = {
   marginBottom: '16px',
@@ -99,15 +100,57 @@ class GuestForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { expand: false };
+    this.state = {
+      expand: false, adultCount: 1, childCount: 0, infantCount: 0, guestCount: 1,
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  handleMouseEnter = (e) => {
+    e.target.style.textDecoration = 'underline';
+  }
+
+  handleMouseLeave = (e) => {
+    e.target.style.textDecoration = 'none';
+  }
+
+  handleAddButton = (e) => {
+    const name = e.target.getAttribute('name');
+    console.log(e.target, this.state[name]);
+    this.setState({ [name]: ++this.state[name] },
+      () => {
+        const { adultCount, childCount } = this.state;
+        this.setState({ guestCount: adultCount + childCount });
+      });
+  }
+
+  handleSubtractButton = (e) => {
+    const name = e.target.getAttribute('name');
+    this.setState({ [name]: --this.state[name] },
+      () => {
+        const { adultCount, childCount } = this.state;
+        this.setState({ guestCount: adultCount + childCount });
+      });
   }
 
   expandModal = () => this.setState({ expand: true });
 
+  handleClick = (e) => {
+    console.log('1', 'click');
+    console.log('target', e.target);
+    if (!this.node.contains(e.target)) this.closeModal();
+  }
+
   closeModal = () => this.setState({ expand: false });
 
+
   render() {
-    const { expand } = this.state;
+    const {
+      expand, adultCount, childCount, infantCount,
+    } = this.state;
 
     return (
       <div>
@@ -131,7 +174,9 @@ class GuestForm extends React.Component {
                 </div>
               </div>
             </button>
-            {expand && <GuestModal closeModal={this.closeModal} />}
+            <div ref={(node) => { this.node = node; }}>
+              {expand && <GuestModal expandModal={this.expandModal} closeModal={this.closeModal} adultCount={adultCount} childCount={childCount} infantCount={infantCount} handleAddButton={this.handleAddButton} handleSubtractButton={this.handleSubtractButton} handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} />}
+            </div>
           </div>
         </div>
       </div>
