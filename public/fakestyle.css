@@ -25,12 +25,11 @@
     max-height: 0;
     opacity: 0;
     overflow: hidden;
-    transition: all 13.5s cubic-bezier(0, 1, 0, 1);
 }
 
 .slide {
   max-height: 500px;
   opacity: 1;
-  transition: all 4s ease-out;
+  transition: opacity 1.5s ease-in, max-height 1s linear;
   color: cornflowerblue;
 }
