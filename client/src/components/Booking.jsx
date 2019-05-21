@@ -54,11 +54,13 @@ class Booking extends React.Component {
   }
 
   render() {
+    const { maxGuests, maxInfants } = this.props;
+
     return (
       <form action="">
         <div style={bookingForm}>
           <CheckingForm />
-          <GuestForm />
+          <GuestForm maxGuests={maxGuests} maxInfants={maxInfants} />
         </div>
         <div style={buttonDiv}>
           <button type="submit" style={bookButton}>
