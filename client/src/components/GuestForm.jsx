@@ -75,13 +75,20 @@ const guestLabel = {
 };
 
 const expandedSpan = {
+  cursor: 'pointer',
+  padding: '0',
+  margin: '0',
+};
+
+const activeSpan = {
   backgroundColor: '#99ede6',
   borderColor: '#99ede6',
   color: '#007a87',
   borderRadius: '3px',
   cursor: 'pointer',
-  padding: '0.25em 0.5em',
-};
+  padding: '0',
+  margin: '0',
+}
 
 const svgCell = {
   display: 'table-cell',
@@ -101,6 +108,8 @@ class GuestForm extends React.Component {
 
     this.state = {
       expand: false,
+      activeGuestCount: false,
+      activeInfantCount: false,
       adultCount: 1,
       childCount: 0,
       infantCount: 0,
@@ -138,7 +147,7 @@ class GuestForm extends React.Component {
           if (name !== 'infantCount') {
             const { adultCount, childCount } = this.state;
 
-            this.setState({ guestCount: adultCount + childCount },
+            this.setState({ guestCount: adultCount + childCount, activeGuestCount: true, activeInfantCount: false },
               () => {
                 const { guestCount } = this.state;
 
@@ -148,7 +157,7 @@ class GuestForm extends React.Component {
               });
           } else {
             const { infantCount } = this.state;
-
+            this.setState({ activeGuestCount: false, activeInfantCount: true });
             if (infantCount === maxInfants) this.setState({ [disableAdd]: true });
           }
           this.setState({ [disableSubtract]: false });
@@ -167,7 +176,7 @@ class GuestForm extends React.Component {
           const { adultCount, childCount, infantCount } = this.state;
 
           if (name !== 'infantCount') {
-            this.setState({ guestCount: adultCount + childCount },
+            this.setState({ guestCount: adultCount + childCount, activeGuestCount: true, activeInfantCount: false },
               () => {
                 const { guestCount } = this.state;
                 const { maxGuests } = this.props;
@@ -176,6 +185,8 @@ class GuestForm extends React.Component {
                   this.setState({ adultCountAddDisable: false, childCountAddDisable: false });
                 }
               });
+          } else {
+            this.setState({ activeInfantCount: true, activeGuestCount: false });
           }
           if (name === 'adultCount' && adultCount === 1) this.setState({ adultCountSubtractDisable: true });
           if (name === 'childCount' && childCount === 0) this.setState({ childCountSubtractDisable: true });
@@ -184,7 +195,7 @@ class GuestForm extends React.Component {
     }
   }
 
-  expandModal = () => this.setState({ expand: true });
+  expandModal = () => this.setState({ expand: true, activeGuestCount: true });
 
   handleClick = (e) => {
     if (!this.node.contains(e.target)) this.closeModal();
@@ -195,9 +206,10 @@ class GuestForm extends React.Component {
 
   render() {
     const {
-      expand, adultCount, childCount, infantCount,
+      expand, adultCount, childCount, infantCount, guestCount,
       adultCountAddDisable, childCountAddDisable, infantCountAddDisable,
       adultCountSubtractDisable, childCountSubtractDisable, infantCountSubtractDisable,
+      activeGuestCount, activeInfantCount,
     } = this.state;
 
     const { maxGuests } = this.props;
@@ -213,7 +225,9 @@ class GuestForm extends React.Component {
                   <div style={buttonTable}>
                     <div style={guestCell}>
                       <div style={guestLabel}>
-                        <span style={expand ? expandedSpan : {}}>1 guest</span>
+                        <span style={expand ? (activeGuestCount ? activeSpan : expandedSpan) : {}}>{`${guestCount} guests`}</span>
+                        {infantCount > 0 && <span>,</span>}
+                        {infantCount > 0 && <span style={expand ? (activeInfantCount ? activeSpan : expandedSpan) : {}}>{`${infantCount} infants`}</span>}
                       </div>
                     </div>
                     <div style={svgCell}>
