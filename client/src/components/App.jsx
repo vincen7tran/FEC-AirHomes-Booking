@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Booking from './Booking.jsx';
 import Report from './Report.jsx';
+import ReportModal from './ReportModal.jsx';
 import Slider from './Slider.jsx';
 
 const body = {
@@ -56,7 +57,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { listing: {}, hidden: true };
+    this.state = { listing: {}, hideSlide: true, hideReport: true };
   }
 
   componentDidMount() {
@@ -64,23 +65,33 @@ class App extends React.Component {
       .then(({ data }) => this.setState({ listing: data[0] }));
 
     window.addEventListener('scroll', this.handleScroll);
+    document.addEventListener('mousedown', this.handleClick, false);
   }
+
+  handleClick = (e) => {
+    const modal = document.getElementById('modal');
+    if (e.target === modal) this.closeReportModal();
+  }
+
+  onReportClick = () => { this.setState({ hideReport: false }); }
+
+  closeReportModal = () => { this.setState({ hideReport: true }); }
 
   handleScroll = () => {
     const header = document.getElementsByClassName('fakeHeader')[0];
     const headerBottom = header.getBoundingClientRect().bottom;
 
     if (headerBottom < 0) {
-      this.setState({ hidden: false });
+      this.setState({ hideSlide: false });
     } else {
-      this.setState({ hidden: true });
+      this.setState({ hideSlide: true });
     }
   }
 
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing, hidden } = this.state;
+    const { listing, hideSlide, hideReport } = this.state;
 
     return (
       <div style={body}>
@@ -98,10 +109,13 @@ class App extends React.Component {
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
-              <Slider hidden={hidden} />
+              <Slider hidden={hideSlide} />
             </div>
           </div>
-          <Report />
+          <Report onReportClick={this.onReportClick} />
+          <div ref={(node) => { this.node = node; }}>
+            {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
+          </div>
         </div>
       </div>
     );
