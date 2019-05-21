@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Booking from './Booking.jsx';
 import Report from './Report.jsx';
+import Slider from './Slider.jsx';
 
 const body = {
   position: 'sticky',
@@ -51,9 +52,18 @@ const container = {
   marginLeft: '45px',
 };
 
+const sliderStyle = {
+  postion: 'sticky',
+  top: '-50px',
+  width: '100%',
+  transition: ' top 0.3s',
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    this.mySlide = React.createRef();
 
     this.state = { listing: {} };
   }
@@ -61,6 +71,18 @@ class App extends React.Component {
   componentDidMount() {
     this.getListing(192)
       .then(({ data }) => this.setState({ listing: data[0] }));
+
+    window.addEventListener('scroll', this.handleScroll());
+  }
+
+  handleScroll = () => {
+    const node = this.mySlide.current;
+
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      node.style.top = '0';
+    } else {
+      node.style.top = '-50px';
+    }
   }
 
   getListing = listingId => axios.get('/listing', { params: { listingId } });
@@ -84,6 +106,9 @@ class App extends React.Component {
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
+            </div>
+            <div ref={this.mySlide}>
+              <Slider style={sliderStyle} />
             </div>
           </div>
           <Report />
