@@ -52,6 +52,13 @@ const container = {
   marginLeft: '45px',
 };
 
+const sliderStyle = {
+  postion: 'sticky',
+  top: '-50px',
+  width: '100%',
+  transition: ' top 0.3s',
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
