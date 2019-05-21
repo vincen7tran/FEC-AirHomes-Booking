@@ -205,7 +205,7 @@ class GuestForm extends React.Component {
     if (!this.node.contains(e.target)) this.closeModal();
   }
 
-  closeModal = () => this.setState({ expand: false });
+  closeModal = () => this.setState({ expand: false, activeInfantCount: false });
 
 
   render() {
