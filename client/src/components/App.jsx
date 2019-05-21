@@ -4,6 +4,8 @@ import Booking from './Booking.jsx';
 import Report from './Report.jsx';
 
 const body = {
+  position: 'sticky',
+  top: '20px',
   width: '376px',
   margin: '0 auto',
   zIndex: '3',
