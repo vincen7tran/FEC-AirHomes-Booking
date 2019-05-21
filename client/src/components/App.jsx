@@ -52,13 +52,6 @@ const container = {
   marginLeft: '45px',
 };
 
-const sliderStyle = {
-  postion: 'sticky',
-  top: '-50px',
-  width: '100%',
-  transition: ' top 0.3s',
-};
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -106,9 +99,9 @@ class App extends React.Component {
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
-            </div>
-            <div ref={this.mySlide}>
-              <Slider hidden={hidden} />
+              <div ref={this.mySlide}>
+                <Slider hidden={hidden} />
+              </div>
             </div>
           </div>
           <Report />

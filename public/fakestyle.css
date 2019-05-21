@@ -20,16 +20,3 @@
 .fakeFooter {
   
 }
-
-.hide {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-}
-
-.slide {
-  max-height: 500px;
-  opacity: 1;
-  transition: opacity 1.5s ease-in, max-height 1s linear;
-  color: cornflowerblue;
-}
