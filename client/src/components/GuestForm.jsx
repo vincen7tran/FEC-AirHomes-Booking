@@ -88,7 +88,7 @@ const activeSpan = {
   cursor: 'pointer',
   padding: '0',
   margin: '0',
-}
+};
 
 const svgCell = {
   display: 'table-cell',
