@@ -4,9 +4,6 @@
   grid-auto-rows: minmax(100px, auto);
 }
 
-.fakeHeader {
-}
-
 .fakeBodyContent {
   grid-column: 1 / 2;
   grid-row: 1;
@@ -15,8 +12,4 @@
 #root {
   grid-column: 2 / 3;
   grid-row: 1;
-}
-
-.fakeFooter {
-  
 }
