@@ -21,3 +21,16 @@
   
 }
 
+.hide {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 13.5s cubic-bezier(0, 1, 0, 1);
+}
+
+.slide {
+  max-height: 500px;
+  opacity: 1;
+  transition: all 4s ease-out;
+  color: cornflowerblue;
+}

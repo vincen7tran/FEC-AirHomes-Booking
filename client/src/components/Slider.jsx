@@ -1,11 +1,16 @@
 import React from 'react';
 
-const Slider = () => {
+const Slider = (props) => {
+  const { hidden } = props;
+  console.log(hidden);
+
   return (
-    <div>
-      Slider Test
+    <div className={hidden ? 'hide' : 'slide'}>
+      <div>text</div>
+      <div>text</div>
+      <div>text</div>
     </div>
   );
-}
+};
 
 export default Slider;

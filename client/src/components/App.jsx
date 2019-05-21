@@ -52,43 +52,36 @@ const container = {
   marginLeft: '45px',
 };
 
-const sliderStyle = {
-  postion: 'sticky',
-  top: '-50px',
-  width: '100%',
-  transition: ' top 0.3s',
-};
-
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.mySlide = React.createRef();
 
-    this.state = { listing: {} };
+    this.state = { listing: {}, hidden: true };
   }
 
   componentDidMount() {
     this.getListing(192)
       .then(({ data }) => this.setState({ listing: data[0] }));
 
-    window.addEventListener('scroll', this.handleScroll());
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   handleScroll = () => {
     const node = this.mySlide.current;
-
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      node.style.top = '0';
-    } else {
-      node.style.top = '-50px';
+    const fromTop = node.getBoundingClientRect().bottom;
+    const relativeTop = node.offsetTop;
+    console.log(fromTop === relativeTop, fromTop, relativeTop);
+    if (fromTop - 20 === relativeTop) {
+      this.setState({ hidden: false });
     }
   }
 
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing } = this.state;
+    const { listing, hidden } = this.state;
 
     return (
       <div style={body}>
@@ -108,7 +101,7 @@ class App extends React.Component {
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
             </div>
             <div ref={this.mySlide}>
-              <Slider style={sliderStyle} />
+              <Slider hidden={hidden} />
             </div>
           </div>
           <Report />
