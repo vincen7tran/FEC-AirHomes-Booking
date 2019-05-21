@@ -72,7 +72,7 @@ const Slider = (props) => {
         <div style={hidden ? backgroundHide : backgroundSlide}>
           <div style={textContainer}>
             <span style={headText}>This home is on people&#39;s minds.</span>
-            <span style={bodyText}>It&#39;s been viewed 500+ times in the past week.</span>
+            <div style={bodyText}>It&#39;s been viewed 500+ times in the past week.</div>
           </div>
         </div>
       </div>
