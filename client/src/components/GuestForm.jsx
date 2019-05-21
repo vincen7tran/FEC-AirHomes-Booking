@@ -86,7 +86,7 @@ const activeSpan = {
   color: '#007a87',
   borderRadius: '3px',
   cursor: 'pointer',
-  padding: '0',
+  padding: '4.25px 8.5px',
   margin: '0',
 };
 
