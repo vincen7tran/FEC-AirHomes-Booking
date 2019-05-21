@@ -175,10 +175,21 @@ const closeButton = {
 
 const GuestModal = (props) => {
   const {
-    closeModal, handleAddButton, handleSubtractButton, handleMouseEnter, handleMouseLeave,
-    maxGuests, adultCount, childCount, infantCount,
-    adultAddDisable, childAddDisable, infantAddDisable,
-    adultSubtractDisable, childSubtractDisable, infantSubtractDisable,
+    closeModal,
+    handleAddButton,
+    handleSubtractButton,
+    handleMouseEnter,
+    handleMouseLeave,
+    maxGuests,
+    adultCount,
+    childCount,
+    infantCount,
+    adultAddDisable,
+    childAddDisable,
+    infantAddDisable,
+    adultSubtractDisable,
+    childSubtractDisable,
+    infantSubtractDisable,
   } = props;
 
   return (

@@ -52,18 +52,9 @@ const container = {
   marginLeft: '45px',
 };
 
-const sliderStyle = {
-  postion: 'sticky',
-  top: '-50px',
-  width: '100%',
-  transition: ' top 0.3s',
-};
-
 class App extends React.Component {
   constructor(props) {
     super(props);
-
-    this.mySlide = React.createRef();
 
     this.state = { listing: {}, hidden: true };
   }
@@ -76,12 +67,13 @@ class App extends React.Component {
   }
 
   handleScroll = () => {
-    const node = this.mySlide.current;
-    const fromTop = node.getBoundingClientRect().bottom;
-    const relativeTop = node.offsetTop;
-    console.log(fromTop === relativeTop, fromTop, relativeTop);
-    if (fromTop - 20 === relativeTop) {
+    const header = document.getElementsByClassName('fakeHeader')[0];
+    const headerBottom = header.getBoundingClientRect().bottom;
+
+    if (headerBottom < 0) {
       this.setState({ hidden: false });
+    } else {
+      this.setState({ hidden: true });
     }
   }
 
@@ -106,8 +98,6 @@ class App extends React.Component {
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
-            </div>
-            <div ref={this.mySlide}>
               <Slider hidden={hidden} />
             </div>
           </div>

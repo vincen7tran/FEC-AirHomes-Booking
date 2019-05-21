@@ -176,15 +176,19 @@ class GuestForm extends React.Component {
           const { adultCount, childCount, infantCount } = this.state;
 
           if (name !== 'infantCount') {
-            this.setState({ guestCount: adultCount + childCount, activeGuestCount: true, activeInfantCount: false },
-              () => {
-                const { guestCount } = this.state;
-                const { maxGuests } = this.props;
+            this.setState({ 
+              guestCount: adultCount + childCount,
+              activeGuestCount: true,
+              activeInfantCount: false,
+            },
+            () => {
+              const { guestCount } = this.state;
+              const { maxGuests } = this.props;
 
-                if (guestCount < maxGuests) {
-                  this.setState({ adultCountAddDisable: false, childCountAddDisable: false });
-                }
-              });
+              if (guestCount < maxGuests) {
+                this.setState({ adultCountAddDisable: false, childCountAddDisable: false });
+              }
+            });
           } else {
             this.setState({ activeInfantCount: true, activeGuestCount: false });
           }
