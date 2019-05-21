@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Booking from './Booking.jsx';
 import Report from './Report.jsx';
+import Slider from './Slider.jsx';
 
 const body = {
   position: 'sticky',
@@ -51,22 +52,43 @@ const container = {
   marginLeft: '45px',
 };
 
+const sliderStyle = {
+  postion: 'sticky',
+  top: '-50px',
+  width: '100%',
+  transition: ' top 0.3s',
+};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { listing: {} };
+    this.mySlide = React.createRef();
+
+    this.state = { listing: {}, hidden: true };
   }
 
   componentDidMount() {
     this.getListing(192)
       .then(({ data }) => this.setState({ listing: data[0] }));
+
+    window.addEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = () => {
+    const node = this.mySlide.current;
+    const fromTop = node.getBoundingClientRect().bottom;
+    const relativeTop = node.offsetTop;
+    console.log(fromTop === relativeTop, fromTop, relativeTop);
+    if (fromTop - 20 === relativeTop) {
+      this.setState({ hidden: false });
+    }
   }
 
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing } = this.state;
+    const { listing, hidden } = this.state;
 
     return (
       <div style={body}>
@@ -84,6 +106,9 @@ class App extends React.Component {
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
+            </div>
+            <div ref={this.mySlide}>
+              <Slider hidden={hidden} />
             </div>
           </div>
           <Report />
