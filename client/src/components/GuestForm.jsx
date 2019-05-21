@@ -75,13 +75,20 @@ const guestLabel = {
 };
 
 const expandedSpan = {
+  cursor: 'pointer',
+  padding: '0',
+  margin: '0',
+};
+
+const activeSpan = {
   backgroundColor: '#99ede6',
   borderColor: '#99ede6',
   color: '#007a87',
   borderRadius: '3px',
   cursor: 'pointer',
-  padding: '0.25em 0.5em',
-};
+  padding: '0',
+  margin: '0',
+}
 
 const svgCell = {
   display: 'table-cell',
@@ -98,9 +105,21 @@ const svgStyle = {
 class GuestForm extends React.Component {
   constructor(props) {
     super(props);
-    const { maxGuests } = props;
+
     this.state = {
-      expand: false, adultCount: 1, childCount: 0, infantCount: 0, guestCount: 1,
+      expand: false,
+      activeGuestCount: false,
+      activeInfantCount: false,
+      adultCount: 1,
+      childCount: 0,
+      infantCount: 0,
+      guestCount: 1,
+      adultCountAddDisable: false,
+      childCountAddDisable: false,
+      infantCountAddDisable: false,
+      adultCountSubtractDisable: true,
+      childCountSubtractDisable: true,
+      infantCountSubtractDisable: true,
     };
   }
 
@@ -118,23 +137,65 @@ class GuestForm extends React.Component {
 
   handleAddButton = (e) => {
     const name = e.target.getAttribute('name');
-    this.setState(prevState => ({ [name]: prevState[name] + 1 }),
-      () => {
-        const { adultCount, childCount } = this.state;
-        this.setState({ guestCount: adultCount + childCount });
-      });
+    const disableAdd = `${name}AddDisable`;
+    const disableSubtract = `${name}SubtractDisable`;
+    const { maxGuests, maxInfants } = this.props;
+
+    if (!this.state[disableAdd]) {
+      this.setState(prevState => ({ [name]: prevState[name] + 1 }),
+        () => {
+          if (name !== 'infantCount') {
+            const { adultCount, childCount } = this.state;
+
+            this.setState({ guestCount: adultCount + childCount, activeGuestCount: true, activeInfantCount: false },
+              () => {
+                const { guestCount } = this.state;
+
+                if (guestCount === maxGuests) {
+                  this.setState({ adultCountAddDisable: true, childCountAddDisable: true });
+                }
+              });
+          } else {
+            const { infantCount } = this.state;
+            this.setState({ activeGuestCount: false, activeInfantCount: true });
+            if (infantCount === maxInfants) this.setState({ [disableAdd]: true });
+          }
+          this.setState({ [disableSubtract]: false });
+        });
+    }
   }
 
   handleSubtractButton = (e) => {
     const name = e.target.getAttribute('name');
-    this.setState(prevState => ({ [name]: prevState[name] - 1 }),
-      () => {
-        const { adultCount, childCount } = this.state;
-        this.setState({ guestCount: adultCount + childCount });
-      });
+    const disableAdd = `${name}AddDisable`;
+    const disableSubtract = `${name}SubtractDisable`;
+    if (!this.state[disableSubtract]) {
+      this.setState(prevState => ({ [name]: prevState[name] - 1 }),
+        () => {
+          this.setState({ [disableAdd]: false });
+          const { adultCount, childCount, infantCount } = this.state;
+
+          if (name !== 'infantCount') {
+            this.setState({ guestCount: adultCount + childCount, activeGuestCount: true, activeInfantCount: false },
+              () => {
+                const { guestCount } = this.state;
+                const { maxGuests } = this.props;
+
+                if (guestCount < maxGuests) {
+                  this.setState({ adultCountAddDisable: false, childCountAddDisable: false });
+                }
+              });
+          } else {
+            this.setState({ activeInfantCount: true, activeGuestCount: false });
+          }
+          if (name === 'adultCount' && adultCount === 1) this.setState({ adultCountSubtractDisable: true });
+          if (name === 'childCount' && childCount === 0) this.setState({ childCountSubtractDisable: true });
+          if (name === 'infantCount' && infantCount === 0) this.setState({ infantCountSubtractDisable: true });
+        });
+    }
   }
 
-  expandModal = () => this.setState({ expand: true });
+  expandModal = () => this.setState({ expand: true, activeGuestCount: true });
 
   handleClick = (e) => {
     if (!this.node.contains(e.target)) this.closeModal();
@@ -145,8 +206,13 @@ class GuestForm extends React.Component {
 
   render() {
     const {
-      expand, adultCount, childCount, infantCount,
+      expand, adultCount, childCount, infantCount, guestCount,
+      adultCountAddDisable, childCountAddDisable, infantCountAddDisable,
+      adultCountSubtractDisable, childCountSubtractDisable, infantCountSubtractDisable,
+      activeGuestCount, activeInfantCount,
     } = this.state;
+
+    const { maxGuests } = this.props;
 
     return (
       <div>
@@ -159,7 +225,9 @@ class GuestForm extends React.Component {
                   <div style={buttonTable}>
                     <div style={guestCell}>
                       <div style={guestLabel}>
-                        <span style={expand ? expandedSpan : {}}>1 guest</span>
+                        <span style={expand ? (activeGuestCount ? activeSpan : expandedSpan) : {}}>{`${guestCount} guests`}</span>
+                        {infantCount > 0 && <span>,</span>}
+                        {infantCount > 0 && <span style={expand ? (activeInfantCount ? activeSpan : expandedSpan) : {}}>{`${infantCount} infants`}</span>}
                       </div>
                     </div>
                     <div style={svgCell}>
@@ -171,7 +239,7 @@ class GuestForm extends React.Component {
               </div>
             </button>
             <div ref={(node) => { this.node = node; }}>
-              {expand && <GuestModal expandModal={this.expandModal} closeModal={this.closeModal} adultCount={adultCount} childCount={childCount} infantCount={infantCount} handleAddButton={this.handleAddButton} handleSubtractButton={this.handleSubtractButton} handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} />}
+              {expand && <GuestModal maxGuests={maxGuests} adultAddDisable={adultCountAddDisable} adultSubtractDisable={adultCountSubtractDisable} childAddDisable={childCountAddDisable} childSubtractDisable={childCountSubtractDisable} infantAddDisable={infantCountAddDisable} infantSubtractDisable={infantCountSubtractDisable} expandModal={this.expandModal} closeModal={this.closeModal} adultCount={adultCount} childCount={childCount} infantCount={infantCount} handleAddButton={this.handleAddButton} handleSubtractButton={this.handleSubtractButton} handleMouseEnter={this.handleMouseEnter} handleMouseLeave={this.handleMouseLeave} />}
             </div>
           </div>
         </div>

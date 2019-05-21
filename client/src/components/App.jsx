@@ -57,7 +57,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing(2)
+    this.getListing(192)
       .then(({ data }) => this.setState({ listing: data[0] }));
   }
 
@@ -81,7 +81,7 @@ class App extends React.Component {
                   <span style={font12}>{listing.numberOfRatings}</span>
                 </div>
               </div>
-              <Booking maxGuests={listing.maxGuests} />
+              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
             </div>
           </div>
           <Report />
