@@ -60,6 +60,6 @@ const Report = (props) => {
       </div>
     </div>
   );
-}
+};
 
 export default Report;
