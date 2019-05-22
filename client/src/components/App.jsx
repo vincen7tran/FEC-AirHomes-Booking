@@ -79,6 +79,8 @@ class App extends React.Component {
 
   onReportClick = () => { this.setState({ hideReport: false }); }
 
+  onReviewsClick = () => { document.getElementById('reviewStart').scrollIntoView({ behavior: 'smooth' }); }
+
   closeReportModal = () => { this.setState({ hideReport: true }); }
 
   handleScroll = () => {
@@ -108,7 +110,7 @@ class App extends React.Component {
                   <span style={font12}>per night</span>
                 </div>
                 <div style={reviewContainer}>
-                  <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} />
+                  <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />

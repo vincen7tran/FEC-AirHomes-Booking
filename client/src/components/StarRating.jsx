@@ -28,7 +28,7 @@ const font12 = {
 };
 
 const StarRating = (props) => {
-  const { stars, numberOfRatings } = props;
+  const { stars, numberOfRatings, onReviewsClick } = props;
   const percent = stars * 100 / 5 || 0;
   const frontStars = {
     display: 'flex',
@@ -40,7 +40,7 @@ const StarRating = (props) => {
   };
 
   return (
-    <StarContainer>
+    <StarContainer onClick={onReviewsClick}>
       <div style={backStars}>
         <i className="fa fa-star" />
         <i className="fa fa-star" />
