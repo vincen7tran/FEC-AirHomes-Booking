@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 
 const modalContainer = {
   borderSizing: 'border-box',
@@ -117,7 +117,7 @@ const optionBorder = {
 };
 
 const optionTable = {
-  diplay: 'table',
+  display: 'table',
   width: '100%',
   borderSpacing: '0',
 };
@@ -139,6 +139,7 @@ const optionText = {
 const radioCell = {
   display: 'table-cell',
   verticalAlign: 'top',
+  boxSizing: 'border-box',
 };
 
 const radioMargin = {
@@ -147,7 +148,7 @@ const radioMargin = {
 
 const radioDiv = {
   display: 'inline-block',
-  postion: 'relative',
+  position: 'relative',
 };
 
 const radioInput = {
@@ -162,12 +163,16 @@ const radioBorder = {
   backgroundColor: '#fff',
   color: '#008489',
   display: 'inline-block',
-  maginTop: '2px',
+  marginTop: '2px',
   verticalAlign: 'top',
   borderColor: '#ebebeb',
   borderWidth: '1px',
   borderStyle: 'solid',
-  bordeRadius: '50%',
+  borderRadius: '50%',
+  height: '18px',
+  width: '18px',
+  cursor: 'pointer',
+  boxSizing: 'border-box',
 };
 
 const buttonContainer = {
@@ -206,6 +211,18 @@ const buttonStyle = {
 
 const buttonSpan = {
 
+};
+
+const fillBorder = {
+  margin: '33%',
+};
+
+const svgFillStyle = {
+  height: '1em',
+  width: '1em',
+  display: 'block',
+  fill: 'currentcolor',
+  fontSize: '6px',
 };
 
 const ReportModal = (props) => {
@@ -247,8 +264,12 @@ const ReportModal = (props) => {
                                 <div style={radioCell}>
                                   <div style={radioMargin}>
                                     <div style={radioDiv}>
-                                      <input type="radio" stlye={radioInput} />
-                                      <div style={radioBorder} />
+                                      <input type="radio" name="reason" style={radioInput} />
+                                      <div style={radioBorder}>
+                                        <div style={fillBorder}>
+                                          <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -268,7 +289,7 @@ const ReportModal = (props) => {
                                 <div style={radioCell}>
                                   <div style={radioMargin}>
                                     <div style={radioDiv}>
-                                      <input type="radio" stlye={radioInput} />
+                                      <input type="radio" name="reason" style={radioInput} />
                                       <div style={radioBorder} />
                                     </div>
                                   </div>
@@ -289,7 +310,7 @@ const ReportModal = (props) => {
                                 <div style={radioCell}>
                                   <div style={radioMargin}>
                                     <div style={radioDiv}>
-                                      <input type="radio" stlye={radioInput} />
+                                      <input type="radio" name="reason" style={radioInput} />
                                       <div style={radioBorder} />
                                     </div>
                                   </div>
@@ -310,7 +331,7 @@ const ReportModal = (props) => {
                                 <div style={radioCell}>
                                   <div style={radioMargin}>
                                     <div style={radioDiv}>
-                                      <input type="radio" stlye={radioInput} />
+                                      <input type="radio" name="reason" style={radioInput} />
                                       <div style={radioBorder} />
                                     </div>
                                   </div>
@@ -331,7 +352,7 @@ const ReportModal = (props) => {
                                 <div style={radioCell}>
                                   <div style={radioMargin}>
                                     <div style={radioDiv}>
-                                      <input type="radio" stlye={radioInput} />
+                                      <input type="radio" name="reason" style={radioInput} />
                                       <div style={radioBorder} />
                                     </div>
                                   </div>
