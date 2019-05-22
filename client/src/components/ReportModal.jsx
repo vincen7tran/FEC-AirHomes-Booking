@@ -1,4 +1,5 @@
-  import React from 'react';
+import React from 'react';
+import styled from 'styled-components';
 
 const modalContainer = {
   borderSizing: 'border-box',
@@ -159,21 +160,43 @@ const radioInput = {
   margin: '0',
 };
 
-const radioBorder = {
-  backgroundColor: '#fff',
-  color: '#008489',
-  display: 'inline-block',
-  marginTop: '2px',
-  verticalAlign: 'top',
-  borderColor: '#ebebeb',
-  borderWidth: '1px',
-  borderStyle: 'solid',
-  borderRadius: '50%',
-  height: '18px',
-  width: '18px',
-  cursor: 'pointer',
-  boxSizing: 'border-box',
-};
+// const radioBorder = {
+//   backgroundColor: '#fff',
+//   color: '#008489',
+//   display: 'inline-block',
+//   marginTop: '2px',
+//   verticalAlign: 'top',
+//   borderColor: '#ebebeb',
+//   borderWidth: '1px',
+//   borderStyle: 'solid',
+//   borderRadius: '50%',
+//   height: '18px',
+//   width: '18px',
+//   cursor: 'pointer',
+//   boxSizing: 'border-box',
+// };
+
+const Radio = styled.div`
+  background-color: #fff;
+  color: #008489;
+  display: inline-block;
+  margin-top: 2px;
+  vertical-align: top;
+  border-color: #ebebeb;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:focus {
+    box-shadow: 0px 0px 2px 2px #008489;
+    outline: none;
+    z-index: 1;
+  }
+`;
 
 const buttonContainer = {
   marginTop: '32px',
@@ -225,161 +248,208 @@ const svgFillStyle = {
   fontSize: '6px',
 };
 
-const ReportModal = (props) => {
-  const { closeModal } = props;
+class ReportModal extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div style={modalContainer}>
-      <div style={table}>
-        <div id="modal" style={cell}>
-          <div style={contentContainer}>
-            <section style={contentSection}>
-              <div style={divPadding}>
-                <div style={exitDiv}>
-                  <button type="button" style={exitButton} onClick={closeModal}>
-                    <svg viewBox="0 0 24 24" role="img" aria-label="Close" focusable="false" style={svgStyle}><path d="m23.25 24c-.19 0-.38-.07-.53-.22l-10.72-10.72-10.72 10.72c-.29.29-.77.29-1.06 0s-.29-.77 0-1.06l10.72-10.72-10.72-10.72c-.29-.29-.29-.77 0-1.06s.77-.29 1.06 0l10.72 10.72 10.72-10.72c.29-.29.77-.29 1.06 0s .29.77 0 1.06l-10.72 10.72 10.72 10.72c.29.29.29.77 0 1.06-.15.15-.34.22-.53.22" fillRule="evenodd" /></svg>
-                  </button>
-                </div>
-                <header style={headerStyle}>
-                  <div style={headerDiv}>
-                    <h1 style={title}>Why are you reporting this listing?</h1>
-                    <div style={titleDiv} >This won&#39;t be shared with the host.</div>
+    this.state = {
+      selected: null,
+    };
+  }
+
+  onLabelClick = (e) => {
+    const { id } = e.currentTarget;
+    this.setState({ selected: id },
+      () => {
+        const elementToFocus = document.getElementById(`${id}Radio`);
+        elementToFocus.focus();
+        document.getElementById(`${id}Input`).checked = true;
+      });
+  }
+
+  render() {
+    const { closeModal } = this.props;
+    const { selected} = this.state;
+
+    return (
+      <div style={modalContainer}>
+        <div style={table}>
+          <div id="modal" style={cell}>
+            <div style={contentContainer}>
+              <section style={contentSection}>
+                <div style={divPadding}>
+                  <div style={exitDiv}>
+                    <button type="button" style={exitButton} onClick={closeModal}>
+                      <svg viewBox="0 0 24 24" role="img" aria-label="Close" focusable="false" style={svgStyle}><path d="m23.25 24c-.19 0-.38-.07-.53-.22l-10.72-10.72-10.72 10.72c-.29.29-.77.29-1.06 0s-.29-.77 0-1.06l10.72-10.72-10.72-10.72c-.29-.29-.29-.77 0-1.06s.77-.29 1.06 0l10.72 10.72 10.72-10.72c.29-.29.77-.29 1.06 0s .29.77 0 1.06l-10.72 10.72 10.72 10.72c.29.29.29.77 0 1.06-.15.15-.34.22-.53.22" fillRule="evenodd" /></svg>
+                    </button>
                   </div>
-                </header>
-                <section>
-                  <div style={optionContainer}>
-                    <fieldset style={fieldset}>
-                      <div style={optionsMargin}>
-                        <div style={optionDivMargin}>
-                          <label style={optionLabel} htmlFor="">
-                            <div style={optionBorder}>
-                              <div style={optionTable}>
-                                <div style={optionCell}>
-                                  <div style={optionTable}>
-                                    <div style={optionCell}>
-                                      <div style={optionText}>It&#39;s inaccurate or incorrect</div>
+                  <header style={headerStyle}>
+                    <div style={headerDiv}>
+                      <h1 style={title}>Why are you reporting this listing?</h1>
+                      <div style={titleDiv}>This won&#39;t be shared with the host.</div>
+                    </div>
+                  </header>
+                  <section>
+                    <div style={optionContainer}>
+                      <fieldset style={fieldset}>
+                        <div style={optionsMargin}>
+                          <div style={optionDivMargin}>
+                            <label onClick={this.onLabelClick} id="reasonOne" className="reasonLabel" style={optionLabel} htmlFor="">
+                              <div style={optionBorder}>
+                                <div style={optionTable}>
+                                  <div style={optionCell}>
+                                    <div style={optionTable}>
+                                      <div style={optionCell}>
+                                        <div style={optionText}>It&#39;s inaccurate or incorrect</div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div style={radioCell}>
-                                  <div style={radioMargin}>
-                                    <div style={radioDiv}>
-                                      <input type="radio" name="reason" style={radioInput} />
-                                      <div style={radioBorder}>
-                                        <div style={fillBorder}>
-                                          <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
-                                        </div>
+                                  <div style={radioCell}>
+                                    <div style={radioMargin}>
+                                      <div style={radioDiv}>
+                                        <input id="reasonOneInput" type="radio" name="reason" style={radioInput} />
+                                        <Radio id="reasonOneRadio" tabIndex="-1">
+                                          { selected === 'reasonOne' && (
+                                            <div style={fillBorder}>
+                                              <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                            </div>
+                                          )}
+                                        </Radio>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </label>
-                          <label style={optionLabel} htmlFor="">
-                            <div style={optionBorder}>
-                              <div style={optionTable}>
-                                <div style={optionCell}>
-                                  <div style={optionTable}>
-                                    <div style={optionCell}>
-                                      <div style={optionText}>It&#39;s not a real place to stay</div>
+                            </label>
+                            <label onClick={this.onLabelClick} id="reasonTwo" className="reasonLabel" style={optionLabel} htmlFor="">
+                              <div style={optionBorder}>
+                                <div style={optionTable}>
+                                  <div style={optionCell}>
+                                    <div style={optionTable}>
+                                      <div style={optionCell}>
+                                        <div style={optionText}>It&#39;s not a real place to stay</div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div style={radioCell}>
-                                  <div style={radioMargin}>
-                                    <div style={radioDiv}>
-                                      <input type="radio" name="reason" style={radioInput} />
-                                      <div style={radioBorder} />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </label>
-                          <label style={optionLabel} htmlFor="">
-                            <div style={optionBorder}>
-                              <div style={optionTable}>
-                                <div style={optionCell}>
-                                  <div style={optionTable}>
-                                    <div style={optionCell}>
-                                      <div style={optionText}>It&#39;s a scam</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div style={radioCell}>
-                                  <div style={radioMargin}>
-                                    <div style={radioDiv}>
-                                      <input type="radio" name="reason" style={radioInput} />
-                                      <div style={radioBorder} />
+                                  <div style={radioCell}>
+                                    <div style={radioMargin}>
+                                      <div style={radioDiv}>
+                                        <input id="reasonTwoInput" type="radio" name="reason" style={radioInput} />
+                                        <Radio id="reasonTwoRadio" tabIndex="-1">
+                                          { selected === 'reasonTwo' && (
+                                             <div style={fillBorder}>
+                                               <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                             </div>
+                                          )}
+                                        </Radio>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </label>
-                          <label style={optionLabel} htmlFor="">
-                            <div style={optionBorder}>
-                              <div style={optionTable}>
-                                <div style={optionCell}>
-                                  <div style={optionTable}>
-                                    <div style={optionCell}>
-                                      <div style={optionText}>It&#39;s offensive</div>
+                            </label>
+                            <label onClick={this.onLabelClick} id="reasonThree" className="reasonLabel" style={optionLabel} htmlFor="">
+                              <div style={optionBorder}>
+                                <div style={optionTable}>
+                                  <div style={optionCell}>
+                                    <div style={optionTable}>
+                                      <div style={optionCell}>
+                                        <div style={optionText}>It&#39;s a scam</div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div style={radioCell}>
-                                  <div style={radioMargin}>
-                                    <div style={radioDiv}>
-                                      <input type="radio" name="reason" style={radioInput} />
-                                      <div style={radioBorder} />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </label>
-                          <label style={optionLabel} htmlFor="">
-                            <div style={optionBorder}>
-                              <div style={optionTable}>
-                                <div style={optionCell}>
-                                  <div style={optionTable}>
-                                    <div style={optionCell}>
-                                      <div style={optionText}>It&#39;s something else</div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div style={radioCell}>
-                                  <div style={radioMargin}>
-                                    <div style={radioDiv}>
-                                      <input type="radio" name="reason" style={radioInput} />
-                                      <div style={radioBorder} />
+                                  <div style={radioCell}>
+                                    <div style={radioMargin}>
+                                      <div style={radioDiv}>
+                                        <input id="reasonThreeInput" type="radio" name="reason" style={radioInput} />
+                                        <Radio id="reasonThreeRadio" tabIndex="-1">
+                                          { selected === 'reasonThree' && (
+                                            <div style={fillBorder}>
+                                              <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                            </div>
+                                          )}
+                                        </Radio>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </label>
+                            </label>
+                            <label onClick={this.onLabelClick} id="reasonFour" className="reasonLabel"style={optionLabel} htmlFor="">
+                              <div style={optionBorder}>
+                                <div style={optionTable}>
+                                  <div style={optionCell}>
+                                    <div style={optionTable}>
+                                      <div style={optionCell}>
+                                        <div style={optionText}>It&#39;s offensive</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div style={radioCell}>
+                                    <div style={radioMargin}>
+                                      <div style={radioDiv}>
+                                        <input id="reasonFourInput" type="radio" name="reason" style={radioInput} />
+                                        <Radio id="reasonFourRadio" tabIndex="-1">
+                                          { selected === 'reasonFour' && (
+                                            <div style={fillBorder}>
+                                              <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                            </div>
+                                          )}
+                                        </Radio>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </label>
+                            <label onClick={this.onLabelClick} id="reasonFive" className="reasonLabel"style={optionLabel} htmlFor="">
+                              <div style={optionBorder}>
+                                <div style={optionTable}>
+                                  <div style={optionCell}>
+                                    <div style={optionTable}>
+                                      <div style={optionCell}>
+                                        <div style={optionText}>It&#39;s something else</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div style={radioCell}>
+                                    <div style={radioMargin}>
+                                      <div style={radioDiv}>
+                                        <input id="reasonFiveInput" type="radio" name="reason" style={radioInput} />
+                                        <Radio id="reasonFiveRadio" tabIndex="-1">
+                                          { selected === 'reasonFive' && (
+                                            <div style={fillBorder}>
+                                              <svg viewBox="0 0 16 16" role="presentation" aria-hidden="true" focusable="false" style={svgFillStyle}><ellipse cx="8" cy="8" fillRule="evenodd" rx="8" ry="8" /></svg>
+                                            </div>
+                                          )}
+                                        </Radio>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+                      </fieldset>
+                      <div style={buttonContainer}>
+                        <div style={buttonDiv}>
+                          <div />
+                          <button type="button" style={buttonStyle} onClick={closeModal}>
+                            <span style={buttonSpan}>Finish</span>
+                          </button>
                         </div>
                       </div>
-                    </fieldset>
-                    <div style={buttonContainer}>
-                      <div style={buttonDiv}>
-                        <div />
-                        <button type="button" style={buttonStyle} onClick={closeModal}>
-                          <span style={buttonSpan}>Finish</span>
-                        </button>
-                      </div>
                     </div>
-                  </div>
-                </section>
-              </div>
-            </section>
+                  </section>
+                </div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default ReportModal;
