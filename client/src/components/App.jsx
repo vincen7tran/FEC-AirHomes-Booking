@@ -4,6 +4,7 @@ import Booking from './Booking.jsx';
 import Report from './Report.jsx';
 import ReportModal from './ReportModal.jsx';
 import Slider from './Slider.jsx';
+import StarRating from './StarRating.jsx';
 
 const body = {
   position: 'sticky',
@@ -104,8 +105,7 @@ class App extends React.Component {
                   <span style={font12}>per night</span>
                 </div>
                 <div style={reviewContainer}>
-                  <span>{listing.averageRating}</span>
-                  <span style={font12}>{listing.numberOfRatings}</span>
+                  <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} />
                 </div>
               </div>
               <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
