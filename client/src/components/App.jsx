@@ -6,9 +6,9 @@ import ReportModal from './ReportModal.jsx';
 import Slider from './Slider.jsx';
 
 const body = {
+  boxSizing: 'border-box',
   position: 'sticky',
   top: '20px',
-  width: '376px',
   margin: '0 auto',
   zIndex: '3',
   fontFamily: 'Arial, Helvetica, sans-serif',
@@ -16,6 +16,7 @@ const body = {
 };
 
 const card = {
+  width: '326px',
   paddingLeft: '24px',
   paddingRight: '24px',
   border: '1px solid #e4e4e4',
@@ -29,14 +30,15 @@ const contentContainer = {
 
 const priceAndRating = {
   borderBottom: '1px solid #e4e4e4',
+  marginBottom: '16px',
 };
 
 const priceContainer = {
-
+  
 };
 
 const reviewContainer = {
-
+  marginBottom: '16px',
 };
 
 const baseRate = {

@@ -4,7 +4,7 @@ const app = require('../server/app');
 describe('GET /listing', () => {
   it('respond with json containing listing data',
     () => request(app)
-      .get('/listing?listingId=2766')
+      .get('/listing?listingId=192')
       .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
