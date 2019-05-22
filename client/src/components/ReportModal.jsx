@@ -160,22 +160,6 @@ const radioInput = {
   margin: '0',
 };
 
-// const radioBorder = {
-//   backgroundColor: '#fff',
-//   color: '#008489',
-//   display: 'inline-block',
-//   marginTop: '2px',
-//   verticalAlign: 'top',
-//   borderColor: '#ebebeb',
-//   borderWidth: '1px',
-//   borderStyle: 'solid',
-//   borderRadius: '50%',
-//   height: '18px',
-//   width: '18px',
-//   cursor: 'pointer',
-//   boxSizing: 'border-box',
-// };
-
 const Radio = styled.div`
   background-color: #fff;
   color: #008489;
