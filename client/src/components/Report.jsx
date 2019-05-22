@@ -1,8 +1,10 @@
 import React from 'react';
 
 const reportContainer = {
+  width: '326px',
   marginTop: '16px',
   textAlign: 'center',
+  padding: '1px 25px',
 };
 
 const reportButton = {
