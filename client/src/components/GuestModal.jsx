@@ -209,10 +209,10 @@ const GuestModal = (props) => {
                     </button>
                   </div>
                   <div style={countCell}>
-                    <div style={countText}>{adultCount}</div>
+                    <div id="adultCount" style={countText}>{adultCount}</div>
                   </div>
                   <div style={plusCell}>
-                    <button type="button" style={adultAddDisable ? buttonDisable : optionButton} name="adultCount" onClick={handleAddButton}>
+                    <button id="adultAddButton" type="button" style={adultAddDisable ? buttonDisable : optionButton} name="adultCount" onClick={handleAddButton}>
                       <span style={adultAddDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="add" name="adultCount" focusable="false" style={svgOptions}>
                           <rect name="adultCount" height="2" rx="1" width="12" x="6" y="11" />

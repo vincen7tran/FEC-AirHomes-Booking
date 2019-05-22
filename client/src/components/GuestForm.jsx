@@ -223,7 +223,7 @@ class GuestForm extends React.Component {
         <div style={guestContainer}>
           <span style={font12}>Guests</span>
           <div style={buttonContainer}>
-            <button style={expand ? expandedButton : guestButton} type="button" onClick={this.expandModal}>
+            <button id="guestButton" style={expand ? expandedButton : guestButton} type="button" onClick={this.expandModal}>
               <div style={buttonMargin}>
                 <div style={buttonDiv}>
                   <div style={buttonTable}>
