@@ -1,4 +1,3 @@
 module.exports = {
-  setupFiles: ['<rootDir>/spec/setup.js'],
-  preset: "jest-puppeteer",
+  setupFiles: ['<rootDir>/spec/setup.js']
 };
