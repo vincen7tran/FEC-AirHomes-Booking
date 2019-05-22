@@ -35,7 +35,7 @@ const priceAndRating = {
 };
 
 const priceContainer = {
-  
+
 };
 
 const reviewContainer = {
