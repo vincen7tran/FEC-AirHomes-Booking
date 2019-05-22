@@ -50,6 +50,7 @@ const baseRate = {
 
 const font12 = {
   fontSize: '12px',
+  marginLeft: '3px',
 };
 
 const container = {
@@ -64,7 +65,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing(192)
+    this.getListing(20)
       .then(({ data }) => this.setState({ listing: data[0] }));
 
     window.addEventListener('scroll', this.handleScroll);
