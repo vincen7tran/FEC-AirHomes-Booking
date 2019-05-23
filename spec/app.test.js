@@ -9,4 +9,3 @@ describe('App Component Test Suite', () => {
     expect(hideSlideState).toBe(true);
   });
 });
-

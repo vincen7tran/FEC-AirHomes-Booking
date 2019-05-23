@@ -202,7 +202,7 @@ const GuestModal = (props) => {
               <div style={optionButtonContainer}>
                 <div style={optionButtonTable}>
                   <div style={minusCell}>
-                    <button type="button" style={adultSubtractDisable ? buttonDisable : optionButton} name="adultCount" onClick={handleSubtractButton}>
+                    <button id="adultSubtractButton" type="button" style={adultSubtractDisable ? buttonDisable : optionButton} name="adultCount" onClick={handleSubtractButton}>
                       <span style={adultSubtractDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="adultCount" focusable="false" style={svgOptions}><rect name="adultCount" height="2" rx="1" width="12" x="6" y="11" /></svg>
                       </span>
@@ -236,17 +236,17 @@ const GuestModal = (props) => {
               <div style={optionButtonContainer}>
                 <div style={optionButtonTable}>
                   <div style={minusCell}>
-                    <button type="button" style={childSubtractDisable ? buttonDisable : optionButton} name="childCount" onClick={handleSubtractButton}>
+                    <button id="childSubtractButton" type="button" style={childSubtractDisable ? buttonDisable : optionButton} name="childCount" onClick={handleSubtractButton}>
                       <span style={childSubtractDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="childCount" focusable="false" style={svgOptions}><rect name="childCount" height="2" rx="1" width="12" x="6" y="11" /></svg>
                       </span>
                     </button>
                   </div>
                   <div style={countCell}>
-                    <div style={countText}>{childCount}</div>
+                    <div id="childCount" style={countText}>{childCount}</div>
                   </div>
                   <div style={plusCell}>
-                    <button type="button" style={childAddDisable ? buttonDisable : optionButton} name="childCount" onClick={handleAddButton}>
+                    <button id="childAddButton" type="button" style={childAddDisable ? buttonDisable : optionButton} name="childCount" onClick={handleAddButton}>
                       <span style={childAddDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="add" name="childCount" focusable="false" style={svgOptions}>
                           <rect name="childCount" height="2" rx="1" width="12" x="6" y="11" />
@@ -270,17 +270,17 @@ const GuestModal = (props) => {
               <div style={optionButtonContainer}>
                 <div style={optionButtonTable}>
                   <div style={minusCell}>
-                    <button type="button" style={infantSubtractDisable ? buttonDisable : optionButton} name="infantCount" onClick={handleSubtractButton}>
+                    <button id="infantSubtractButton" type="button" style={infantSubtractDisable ? buttonDisable : optionButton} name="infantCount" onClick={handleSubtractButton}>
                       <span style={infantSubtractDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="subtract" name="infantCount" focusable="false" style={svgOptions}><rect name="infantCount" height="2" rx="1" width="12" x="6" y="11" /></svg>
                       </span>
                     </button>
                   </div>
                   <div style={countCell}>
-                    <div style={countText}>{infantCount}</div>
+                    <div id="infantCount" style={countText}>{infantCount}</div>
                   </div>
                   <div style={plusCell}>
-                    <button type="button" style={infantAddDisable ? buttonDisable : optionButton} name="infantCount" onClick={handleAddButton}>
+                    <button id="infantAddButton" type="button" style={infantAddDisable ? buttonDisable : optionButton} name="infantCount" onClick={handleAddButton}>
                       <span style={infantAddDisable ? buttonSpanDisable : buttonSpan}>
                         <svg viewBox="0 0 24 24" role="img" aria-label="add" name="infantCount" focusable="false" style={svgOptions}>
                           <rect name="infantCount" height="2" rx="1" width="12" x="6" y="11" />
