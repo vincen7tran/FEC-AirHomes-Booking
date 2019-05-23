@@ -5,6 +5,7 @@ import Report from './Report.jsx';
 import ReportModal from './ReportModal.jsx';
 import Slider from './Slider.jsx';
 import StarRating from './StarRating.jsx';
+import Calendar from './Calendar.jsx';
 
 const body = {
   boxSizing: 'border-box',
@@ -123,6 +124,7 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
+        <Calendar />
       </div>
     );
   }
