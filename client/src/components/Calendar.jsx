@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import style from "styled-components";
+import style from 'styled-components';
 
 const calendarContainer = {
   // zIndex: '1',
@@ -37,7 +37,7 @@ const daysContainer = {
 const daysDiv = {
   left: '0',
   top: '62px',
-  padding: '0 13px',
+  padding: '0 5px',
   color: '#757575',
   position: 'absolute',
   zIndex: '2',
@@ -167,8 +167,8 @@ const tbodyStyle = {
 
 const blankStyle = {
   display: 'table-cell',
-  width: '41px',
-  height: '41px',
+  width: '39px',
+  height: '39px',
 };
 
 const tdDayStyle = {
@@ -178,8 +178,8 @@ const tdDayStyle = {
   fontSize: '14px',
   textAlign: 'center',
   verticalAlign: 'inherit',
-  width: '41px',
-  height: '41px',
+  width: '39px',
+  height: '39px',
   border: '1px solid #e4e7e7',
   color: '#484848',
   background: '#fff',
@@ -273,6 +273,7 @@ class Calendar extends React.Component {
     super(props);
 
     this.state = {
+      currentDateObj: moment(),
       dateObj: moment(),
     };
   }
@@ -309,8 +310,15 @@ class Calendar extends React.Component {
 
   createDays = () => {
     const days = [];
-    const { dateObj } = this.state;
+    const { dateObj, currentDateObj } = this.state;
     const { bookings } = this.props;
+    const setMonth = dateObj.format('MM');
+    const setMonthInt = parseInt(setMonth);
+    const setYear = dateObj.format('YYYY');
+    const setYearInt = parseInt(setYear);
+    const currentMonth = parseInt(currentDateObj.format('MM'));
+    const currentYear = parseInt(currentDateObj.format('YYYY'));
+    const currentDay = parseInt(currentDateObj.format('DD'));
     const id = dateObj.format('YYYY-MM');
 
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
@@ -318,8 +326,11 @@ class Calendar extends React.Component {
       let blackout = true;
 
       if (bookings) blackout = bookings.includes(dayId);
-      
-      if (blackout) {
+
+      if (blackout
+          || setYearInt < currentYear
+          || (setYearInt === currentYear && setMonthInt < currentMonth)
+          || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)) {
         days.push(
           <td id={dayId} key={day} style={tdDayStyle}>
             <div style={blackoutDiv}>

@@ -13,7 +13,7 @@ const body = {
   top: '20px',
   margin: '0 auto',
   zIndex: '3',
-  fontFamily: 'Arial, Helvetica, sans-serif',
+  fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
   color: '#484848',
 };
 
