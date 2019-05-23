@@ -65,7 +65,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing(20)
+    this.getListing(16)
       .then(({ data }) => this.setState({ listing: data[0] }));
 
     window.addEventListener('scroll', this.handleScroll);
