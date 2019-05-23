@@ -65,7 +65,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getListing(16)
+    const id = Math.ceil(Math.random() * 200);
+    this.getListing(id)
       .then(({ data }) => this.setState({ listing: data[0] }));
 
     window.addEventListener('scroll', this.handleScroll);
