@@ -124,7 +124,7 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
-        <Calendar bookings={listing.bookings} />
+        <Calendar bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} />
       </div>
     );
   }

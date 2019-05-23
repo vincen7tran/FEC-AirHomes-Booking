@@ -185,6 +185,34 @@ const tdDayStyle = {
   background: '#fff',
 };
 
+const SelectedDay = style.td`
+  display: table-cell;
+  box-sizing: border-box;
+  width: 39px;
+  height: 39px;
+  color: #fff;
+  background: rgb(0, 166, 153);
+`;
+
+const Day = style.td`
+  display: table-cell;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  vertical-align: inherit;
+  width: 39px;
+  height: 39px;
+  border: 1px solid #e4e7e7;
+  color: #484848;
+  background: #fff;
+
+  &:hover {
+    color: inherit;
+    background: rgb(228, 231, 231);
+  }
+`;
+
 const dayDiv = {
   height: '38px',
   width: '38px',
@@ -204,7 +232,7 @@ const dayText = {
   lineHeight: '12px',
   textAlign: 'center',
   width: '38px',
-  color: '#484848',
+  color: 'inherit',
 };
 
 const blackoutDiv = {
@@ -275,11 +303,14 @@ class Calendar extends React.Component {
     this.state = {
       currentDateObj: moment(),
       dateObj: moment(),
+      bookStartDate: null,
+      bookDates: [],
     };
   }
 
   onDayClick = (e) => {
-    console.log(e.currentTarget);
+    const { id } = e.currentTarget;
+    this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }));
   }
 
   setMonth = (next) => {
@@ -310,8 +341,8 @@ class Calendar extends React.Component {
 
   createDays = () => {
     const days = [];
-    const { dateObj, currentDateObj } = this.state;
-    const { bookings } = this.props;
+    const { dateObj, currentDateObj, bookStartDate } = this.state;
+    const { bookings, finalDate } = this.props;
     const setMonth = dateObj.format('MM');
     const setMonthInt = parseInt(setMonth);
     const setYear = dateObj.format('YYYY');
@@ -320,17 +351,42 @@ class Calendar extends React.Component {
     const currentYear = parseInt(currentDateObj.format('YYYY'));
     const currentDay = parseInt(currentDateObj.format('DD'));
     const id = dateObj.format('YYYY-MM');
+    let finalYear;
+    let finalMonth;
+    let finalDay;
+
+    if (finalDate) {
+      const finalSplit = finalDate.split('-');
+      [finalYear, finalMonth, finalDay] = finalSplit;
+      finalYear = parseInt(finalYear);
+      finalMonth = parseInt(finalMonth);
+      finalDay = parseInt(finalDay);
+    }
 
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
       const dayId = day < 10 ? `${id}-0${day}` : `${id}-${day}`;
       let blackout = true;
 
       if (bookings) blackout = bookings.includes(dayId);
-
-      if (blackout
-          || setYearInt < currentYear
-          || (setYearInt === currentYear && setMonthInt < currentMonth)
-          || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)) {
+      if (dayId === bookStartDate) {
+        days.push(
+          <SelectedDay id={dayId} key={day} onClick={this.onDayClick}>
+            <div style={dayDiv}>
+              <div style={dayPadding}>
+                <div style={dayText}>{day}</div>
+              </div>
+            </div>
+          </SelectedDay>
+        );
+      } else if (
+        blackout
+        || setYearInt < currentYear
+        || (setYearInt === currentYear && setMonthInt < currentMonth)
+        || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)
+        || setYearInt > finalYear
+        || (setYearInt === finalYear && setMonthInt > finalMonth)
+        || (setYearInt === finalYear && setMonthInt === finalMonth && day > finalDay)
+      ) {
         days.push(
           <td id={dayId} key={day} style={tdDayStyle}>
             <div style={blackoutDiv}>
@@ -342,13 +398,13 @@ class Calendar extends React.Component {
         );
       } else {
         days.push(
-          <td id={dayId} key={day} style={tdDayStyle} onClick={this.onDayClick}>
+          <Day id={dayId} key={day} onClick={this.onDayClick}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
               </div>
             </div>
-          </td>
+          </Day>
         );
       }
     }
