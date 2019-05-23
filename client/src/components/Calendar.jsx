@@ -23,7 +23,7 @@ const calendarDiv = {
 
 const calendarHeight = {
   width: '332px',
-  height: '308px',
+  minHeight: '308px',
   position: 'relative',
   overflow: 'hidden',
   borderRadius: '3px',
@@ -240,14 +240,32 @@ const questionText = {
   right: '5px',
 };
 
+const questionPadding = {
+  padding: '0px 24px 24px',
+};
+
 class Calendar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.weekdaysMin = moment.weekdaysMin();
     this.state = {
       dateObj: moment(),
     };
+  }
+
+  onDayClick = (e) => {
+    console.log(e.currentTarget);
+  }
+
+  setMonth = (next) => {
+    const { dateObj } = this.state;
+    const currentMonth = dateObj.month();
+    let newDateObj = Object.assign({}, dateObj);
+
+    if (next) newDateObj = moment(newDateObj).set('month', currentMonth + 1);
+    else newDateObj = moment(newDateObj).set('month', currentMonth - 1);
+
+    this.setState({ dateObj: newDateObj });
   }
 
   getFirstDayOfMonth = () => {
@@ -267,9 +285,14 @@ class Calendar extends React.Component {
 
   createDays = () => {
     const days = [];
-    for (let day = 1; day <= this.state.dateObj.daysInMonth(); day++) {
+    const { dateObj } = this.state;
+    const id = dateObj.format('YYYY-MM');
+
+    for (let day = 1; day <= dateObj.daysInMonth(); day++) {
+      const dayId = day < 10 ? `0${day}` : `${day}`;
+
       days.push(
-        <td key={day} style={tdDayStyle}>
+        <td id={`${id}-${dayId}`} key={day} style={tdDayStyle} onClick={this.onDayClick}>
           <div style={dayDiv}>
             <div style={dayPadding}>
               <div style={dayText}>{day}</div>
@@ -305,6 +328,10 @@ class Calendar extends React.Component {
   }
 
   render() {
+    const { dateObj } = this.state;
+    const currentMonth = dateObj.format('MMMM');
+    const currentYear = dateObj.format('YYYY');
+
     return (
       <div style={calendarContainer}>
         <div style={calendarDiv}>
@@ -337,10 +364,10 @@ class Calendar extends React.Component {
           </div>
           <div tabIndex="-1" style={region}>
             <div style={zeroHeight}>
-              <div style={leftButton}>
+              <div style={leftButton} onClick={() => this.setMonth(false)}>
                 <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M336.2 274.5l-210.1 210h805.4c13 0 23 10 23 23s-10 23-23 23H126.1l210.1 210.1c11 11 11 21 0 32-5 5-10 7-16 7s-11-2-16-7l-249.1-249c-11-11-11-21 0-32l249.1-249.1c21-21.1 53 10.9 32 32z" /></svg>
               </div>
-              <div style={rightButton}>
+              <div style={rightButton} onClick={() => this.setMonth(true)}>
                 <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z" /></svg>
               </div>
             </div>
@@ -348,7 +375,7 @@ class Calendar extends React.Component {
               <div style={calendar}>
                 <div style={calendarPadding}>
                   <div style={monthTitle}>
-                    <strong>May 2019</strong>
+                    <strong>{`${currentMonth} ${currentYear}`}</strong>
                   </div>
                   <table style={tableStyle}>
                     <tbody style={tbodyStyle}>
@@ -358,7 +385,7 @@ class Calendar extends React.Component {
                 </div>
               </div>
             </div>
-            <div>
+            <div style={questionPadding}>
               <QuestionButton type="button">
                 <span style={questionText}>?</span>
               </QuestionButton>
