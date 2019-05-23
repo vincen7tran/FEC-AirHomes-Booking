@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StarContainer = styled.button`
+  margin-top: 3px;
   display: flex;
   cursor: pointer;
   align-items: start;
