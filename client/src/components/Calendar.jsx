@@ -207,6 +207,30 @@ const dayText = {
   color: '#484848',
 };
 
+const blackoutDiv = {
+  height: '38px',
+  width: '38px',
+  position: 'relative',
+  color: '#d8d8d8',
+  margin: '0',
+  textDecoration: 'line-through',
+};
+
+const blackoutPadding = {
+  paddingBottom: '13px',
+  paddingTop: '13px',
+  fontSize: '14px',
+};
+
+const blackoutText = {
+  fontWeight: '700',
+  height: '12px',
+  lineHeight: '12px',
+  textAlign: 'center',
+  width: '38px',
+  color: '#d8d8d8',
+};
+
 const QuestionButton = style.button`
   color: inherit;
   display: block;
@@ -286,20 +310,36 @@ class Calendar extends React.Component {
   createDays = () => {
     const days = [];
     const { dateObj } = this.state;
+    const { bookings } = this.props;
     const id = dateObj.format('YYYY-MM');
 
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
-      const dayId = day < 10 ? `0${day}` : `${day}`;
+      const dayId = day < 10 ? `${id}-0${day}` : `${id}-${day}`;
+      let blackout = true;
 
-      days.push(
-        <td id={`${id}-${dayId}`} key={day} style={tdDayStyle} onClick={this.onDayClick}>
-          <div style={dayDiv}>
-            <div style={dayPadding}>
-              <div style={dayText}>{day}</div>
+      if (bookings) blackout = bookings.includes(dayId);
+      
+      if (blackout) {
+        days.push(
+          <td id={dayId} key={day} style={tdDayStyle}>
+            <div style={blackoutDiv}>
+              <div style={blackoutPadding}>
+                <div style={blackoutText}>{day}</div>
+              </div>
             </div>
-          </div>
-        </td>
-      );
+          </td>
+        );
+      } else {
+        days.push(
+          <td id={dayId} key={day} style={tdDayStyle} onClick={this.onDayClick}>
+            <div style={dayDiv}>
+              <div style={dayPadding}>
+                <div style={dayText}>{day}</div>
+              </div>
+            </div>
+          </td>
+        );
+      }
     }
     return days;
   }
@@ -379,7 +419,7 @@ class Calendar extends React.Component {
                   </div>
                   <table style={tableStyle}>
                     <tbody style={tbodyStyle}>
-                      {this.createTable() }
+                      {this.createTable()}
                     </tbody>
                   </table>
                 </div>
