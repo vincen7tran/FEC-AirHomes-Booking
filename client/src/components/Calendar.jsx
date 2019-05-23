@@ -285,6 +285,29 @@ const QuestionButton = style.button`
   }
 `;
 
+const clearDiv = {
+  textAlign: 'right',
+  marginTop: '4px',
+  overflowWrap: 'break-word',
+  fontSize: '14px',
+  fontWeight: '600',
+  lineHeight: '1.2857em',
+  color: '#484848',
+};
+
+const clearButton = {
+  color: '#008489',
+  textDecorationLine: 'none',
+  background: '#0000',
+  border: '0px',
+  cursor: 'pointer',
+  margin: '0',
+  padding: '0',
+  userSelect: 'auto',
+  textAlign: 'left',
+  font: 'inherit',
+};
+
 const questionText = {
   color: '#fff',
   position: 'absolute',
@@ -312,6 +335,8 @@ class Calendar extends React.Component {
     const { id } = e.currentTarget;
     this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }));
   }
+
+  onClearButton = () => this.setState({ bookStartDate: null, bookDates: [] });
 
   setMonth = (next) => {
     const { dateObj } = this.state;
@@ -435,7 +460,7 @@ class Calendar extends React.Component {
   }
 
   render() {
-    const { dateObj } = this.state;
+    const { dateObj, bookStartDate } = this.state;
     const currentMonth = dateObj.format('MMMM');
     const currentYear = dateObj.format('YYYY');
 
@@ -493,6 +518,11 @@ class Calendar extends React.Component {
               </div>
             </div>
             <div style={questionPadding}>
+              { bookStartDate && (
+              <div style={clearDiv}>
+                <button type="button" style={clearButton} onClick={this.onClearButton}>Clear dates</button>
+              </div>
+              )}
               <QuestionButton type="button">
                 <span style={questionText}>?</span>
               </QuestionButton>
