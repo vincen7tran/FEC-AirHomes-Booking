@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import style from "styled-components";
 
 const calendarContainer = {
   // zIndex: '1',
@@ -18,6 +19,14 @@ const calendarDiv = {
   background: '#fff',
   borderRadius: '3px',
   fontWeight: '600',
+};
+
+const calendarHeight = {
+  width: '332px',
+  height: '308px',
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: '3px',
 };
 
 const daysContainer = {
@@ -143,6 +152,93 @@ const monthTitle = {
   paddingBottom: '37px',
 };
 
+const tableStyle = {
+  display: 'table',
+  borderCollapse: 'collapse',
+  borderSpacing: '0px',
+  borderColor: 'grey',
+};
+
+const tbodyStyle = {
+  display: 'table-row-group',
+  verticalAlign: 'middle',
+  borderColor: 'inherit',
+};
+
+const blankStyle = {
+  display: 'table-cell',
+  width: '41px',
+  height: '41px',
+};
+
+const tdDayStyle = {
+  display: 'table-cell',
+  boxSizing: 'border-box',
+  pointer: 'cursor',
+  fontSize: '14px',
+  textAlign: 'center',
+  verticalAlign: 'inherit',
+  width: '41px',
+  height: '41px',
+  border: '1px solid #e4e7e7',
+  color: '#484848',
+  background: '#fff',
+};
+
+const dayDiv = {
+  height: '38px',
+  width: '38px',
+  position: 'relative',
+  margin: '0',
+};
+
+const dayPadding = {
+  paddingBottom: '13px',
+  paddingTop: '13px',
+  fontSize: '14px',
+};
+
+const dayText = {
+  fontWeight: '700',
+  height: '12px',
+  lineHeight: '12px',
+  textAlign: 'center',
+  width: '38px',
+  color: '#484848',
+};
+
+const QuestionButton = style.button`
+  color: inherit;
+  display: block;
+  cursor: pointer;
+  width: 33px;
+  height: 26px;
+  position: absolute;
+  z-index: 2;
+  bottom: 0px;
+  right: 0px;
+  background: none;
+  overflow: visible;
+  padding: 0;
+  border: none;
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    border-top: 26px solid #0000;
+    border-right: 33px solid #00a699;
+  }
+`;
+
+const questionText = {
+  color: '#fff',
+  position: 'absolute',
+  bottom: '0px',
+  right: '5px',
+};
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -150,8 +246,62 @@ class Calendar extends React.Component {
 
     this.weekdaysMin = moment.weekdaysMin();
     this.state = {
-      dateObject: moment(),
+      dateObj: moment(),
     };
+  }
+
+  getFirstDayOfMonth = () => {
+    const { dateObj } = this.state;
+    return moment(dateObj).startOf('month').format('d');
+  }
+
+  createBlanks = () => {
+    const blanks = [];
+    for (let i = 0; i < this.getFirstDayOfMonth(); i++) {
+      blanks.push(
+        <td style={blankStyle} />
+      );
+    }
+    return blanks;
+  }
+
+  createDays = () => {
+    const days = [];
+    for (let day = 1; day <= this.state.dateObj.daysInMonth(); day++) {
+      days.push(
+        <td key={day} style={tdDayStyle}>
+          <div style={dayDiv}>
+            <div style={dayPadding}>
+              <div style={dayText}>{day}</div>
+            </div>
+          </div>
+        </td>
+      );
+    }
+    return days;
+  }
+
+  createTable = () => {
+    const days = this.createDays();
+    const blanks = this.createBlanks();
+
+    const totalSlots = [...blanks, ...days];
+    const table = [];
+    let tableRow = [];
+
+    totalSlots.forEach((slot, i) => {
+      if (i % 7 !== 0) tableRow.push(slot);
+      else {
+        table.push(tableRow);
+        tableRow = [];
+        tableRow.push(slot);
+      }
+      if (i === totalSlots.length - 1) table.push(tableRow);
+    });
+
+    const month = table.map(row => <tr>{row}</tr>);
+
+    return month;
   }
 
   render() {
@@ -194,12 +344,24 @@ class Calendar extends React.Component {
                 <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z" /></svg>
               </div>
             </div>
-            <div style={calendar}>
-              <div style={calendarPadding}>
-                <div style={monthTitle}>
-                  <strong>May 2019</strong>
+            <div style={calendarHeight}>
+              <div style={calendar}>
+                <div style={calendarPadding}>
+                  <div style={monthTitle}>
+                    <strong>May 2019</strong>
+                  </div>
+                  <table style={tableStyle}>
+                    <tbody style={tbodyStyle}>
+                      {this.createTable() }
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
+            <div>
+              <QuestionButton type="button">
+                <span style={questionText}>?</span>
+              </QuestionButton>
             </div>
           </div>
         </div>
