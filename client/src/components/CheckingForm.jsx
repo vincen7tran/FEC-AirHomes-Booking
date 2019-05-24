@@ -238,39 +238,56 @@ class CheckingForm extends React.Component {
   }
 
   onDayClick = (e) => {
-    const { getBookedDates } = this.props;
-    const { bookStartDate, checkInActive, checkoutActive } = this.state;
+    const { bookStartDate, bookFinalDate, checkInActive, checkoutActive } = this.state;
     const { id } = e.currentTarget;
 
     if (checkInActive) {
-      this.setState(({ bookStartDate: id }),
-        () => {
-          const { bookStartDate, bookFinalDate } = this.state;
-
-          if (bookStartDate && bookFinalDate) {
-            this.bookDates();
-          } else {
-            this.minNightBlackout(id, true);
-            this.findFinalAvail(id, true);
-            this.setState({ checkInActive: false, checkoutActive: true });
-          }
-          getBookedDates(bookStartDate, bookFinalDate);
-        });
+      if (bookFinalDate) {
+        if (moment(id).isAfter(bookFinalDate)) {
+          this.setState({ bookFinalDate: null }, () => this.updateBookStartDate(id));
+        }
+      } else {
+        this.updateBookStartDate(id);
+      }
     } else if (checkoutActive) {
-      this.setState({ bookFinalDate: id },
-        () => {
-          const { bookStartDate, bookFinalDate } = this.state;
-          if (bookStartDate && bookFinalDate) {
-            this.bookDates();
-          } else {
-            this.minNightBlackout(id, false);
-            this.findFinalAvail(id, false);
-            this.setState({ checkInActive: true, checkoutActive: false });
-          }
-
-          getBookedDates(bookStartDate, bookFinalDate);
-        });
+      this.updateBookFinalDate(id);
     }
+  }
+
+  updateBookFinalDate = (id) => {
+    const { getBookedDates } = this.props;
+
+    this.setState({ bookFinalDate: id },
+      () => {
+        const { bookStartDate, bookFinalDate } = this.state;
+        if (bookStartDate && bookFinalDate) {
+          this.bookDates();
+        } else {
+          this.minNightBlackout(id, false);
+          this.findFinalAvail(id, false);
+          this.setState({ checkInActive: true, checkoutActive: false });
+        }
+
+        getBookedDates(bookStartDate, bookFinalDate);
+      });
+  }
+
+  updateBookStartDate = (id) => {
+    const { getBookedDates } = this.props;
+
+    this.setState(({ bookStartDate: id }),
+      () => {
+        const { bookStartDate, bookFinalDate } = this.state;
+
+        if (bookStartDate && bookFinalDate) {
+          this.bookDates();
+        } else {
+          this.minNightBlackout(id, true);
+          this.findFinalAvail(id, true);
+          this.setState({ checkInActive: false, checkoutActive: true });
+        }
+        getBookedDates(bookStartDate, bookFinalDate);
+      });
   }
 
   onHoverBook = (e) => {
@@ -297,6 +314,8 @@ class CheckingForm extends React.Component {
           const hoverDay = moment(id, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
           bookHoverDates.push(hoverDay);
         }
+      } else if (moment(id).isAfter(bookFinalDate)) {
+        return;
       } else {
         while (id !== bookFinalDate) {
           bookHoverDates.push(id);
@@ -418,7 +437,7 @@ class CheckingForm extends React.Component {
     let finalSplit;
 
     if (bookFinalDate && !bookStartDate) {
-      finalSplit = bookFinalDate.split('-');
+      finalSplit = finalDate.split('-');
       if (bookFinalAvail) {
         const availSplit = bookFinalAvail.split('-');
         [initYear, initMonth, initDay] = availSplit;
