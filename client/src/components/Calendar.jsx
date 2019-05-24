@@ -338,6 +338,7 @@ class Calendar extends React.Component {
       currentDateObj: moment(),
       dateObj: moment(),
       bookStartDate: null,
+      bookFinalDate: null,
       bookFinalAvail: null,
       bookDates: [],
       bookHoverDates: [],
@@ -346,12 +347,20 @@ class Calendar extends React.Component {
   }
 
   onDayClick = (e) => {
+    const { bookStartDate } = this.state;
     const { id } = e.currentTarget;
-    this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }),
-      () => {
-        this.minNightBlackout(id);
-        this.findFinalAvail(id);
-      });
+    if (!bookStartDate) {
+      this.setState(({ bookStartDate: id }),
+        () => {
+          this.minNightBlackout(id);
+          this.findFinalAvail(id);
+        });
+    } else {
+      this.setState({ bookFinalDate: id },
+        () => {
+          this.bookDates();
+        });
+    }
   }
 
   onHoverBook = (e) => {
@@ -367,7 +376,6 @@ class Calendar extends React.Component {
       }
     } else {
       while (id !== bookStartDate) {
-        console.log(id);
         bookHoverDates.push(id);
         id = moment(id, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
       }
@@ -397,6 +405,19 @@ class Calendar extends React.Component {
       bookFinalAvail = moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
     }
     this.setState({ bookFinalAvail });
+  }
+
+  bookDates = () => {
+    const { bookStartDate, bookFinalDate } = this.state;
+    let id = bookStartDate;
+    const bookDates = [];
+
+    while (id <= bookFinalDate) {
+      bookDates.push(id);
+      id = moment(id, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+    }
+
+    this.setState({ bookDates });
   }
 
   onClearButton = () => this.setState({ bookStartDate: null, bookFinalAvail: null, bookDates: [], minNightBlackoutDates: [] });
@@ -430,7 +451,7 @@ class Calendar extends React.Component {
   createDays = () => {
     const days = [];
     const {
-      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates, bookHoverDates, bookFinalAvail,
+      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates, bookHoverDates, bookFinalAvail, bookDates,
     } = this.state;
     const { bookings, finalDate, minNights } = this.props;
     const setMonth = dateObj.format('MM');
@@ -467,7 +488,7 @@ class Calendar extends React.Component {
           if (bookings.includes(checkDay)) blackout = true;
         }
       }
-      if (dayId === bookStartDate) {
+      if (dayId === bookStartDate || bookDates.includes(dayId)) {
         days.push(
           <SelectedDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
             <div style={dayDiv}>
