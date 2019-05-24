@@ -238,7 +238,7 @@ class CheckingForm extends React.Component {
   }
 
   onDayClick = (e) => {
-    const { bookStartDate, bookFinalDate, checkInActive, checkoutActive } = this.state;
+    const { bookFinalDate, checkInActive, checkoutActive } = this.state;
     const { id } = e.currentTarget;
 
     if (checkInActive) {
