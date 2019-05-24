@@ -347,18 +347,26 @@ class Calendar extends React.Component {
   }
 
   onDayClick = (e) => {
+    const { getBookedDates } = this.props;
     const { bookStartDate } = this.state;
     const { id } = e.currentTarget;
+    
     if (!bookStartDate) {
       this.setState(({ bookStartDate: id }),
         () => {
           this.minNightBlackout(id);
           this.findFinalAvail(id);
+
+          const { bookStartDate, bookFinalDate } = this.state;
+          getBookedDates(bookStartDate, bookFinalDate);
         });
     } else {
       this.setState({ bookFinalDate: id },
         () => {
           this.bookDates();
+
+          const { bookStartDate, bookFinalDate } = this.state;
+          getBookedDates(bookStartDate, bookFinalDate);
         });
     }
   }
@@ -420,7 +428,19 @@ class Calendar extends React.Component {
     this.setState({ bookDates });
   }
 
-  onClearButton = () => this.setState({ bookStartDate: null, bookFinalAvail: null, bookDates: [], minNightBlackoutDates: [] });
+  onClearButton = () => {
+    this.setState({
+      bookStartDate: null,
+      bookFinalDate: null,
+      bookFinalAvail: null,
+      bookDates: [], 
+      minNightBlackoutDates: [],
+    },
+    () => {
+      const { getBookedDates } = this.props;
+      getBookedDates(null, null);
+    });
+  }
 
   setMonth = (next) => {
     const { dateObj } = this.state;

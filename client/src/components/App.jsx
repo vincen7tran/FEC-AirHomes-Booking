@@ -62,7 +62,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { listing: {}, hideSlide: true, hideReport: true };
+    this.state = { listing: {}, hideSlide: true, hideReport: true, checkIn: null, checkOut: null };
   }
 
   componentDidMount() {
@@ -72,6 +72,10 @@ class App extends React.Component {
 
     window.addEventListener('scroll', this.handleScroll);
     document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  getBookedDates = (checkIn, checkOut) => {
+    this.setState({ checkIn, checkOut });
   }
 
   handleClick = (e) => {
@@ -99,7 +103,7 @@ class App extends React.Component {
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing, hideSlide, hideReport } = this.state;
+    const { listing, hideSlide, hideReport, checkIn, checkOut } = this.state;
 
     return (
       <div style={body}>
@@ -115,7 +119,7 @@ class App extends React.Component {
                   <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
-              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
+              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkOut={checkOut} />
               <Slider hidden={hideSlide} />
             </div>
           </div>
@@ -124,7 +128,7 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
-        <Calendar bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} />
+        <Calendar bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} />
       </div>
     );
   }
