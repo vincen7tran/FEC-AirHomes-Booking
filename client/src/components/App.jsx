@@ -6,7 +6,6 @@ import Report from './Report.jsx';
 import ReportModal from './ReportModal.jsx';
 import Slider from './Slider.jsx';
 import StarRating from './StarRating.jsx';
-import Calendar from './Calendar.jsx';
 
 const body = {
   boxSizing: 'border-box',
@@ -136,7 +135,7 @@ class App extends React.Component {
                   <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
-              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
+              <Booking bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
               <Slider hidden={hideSlide} />
             </div>
           </div>
@@ -145,7 +144,6 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
-        <Calendar bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} />
       </div>
     );
   }

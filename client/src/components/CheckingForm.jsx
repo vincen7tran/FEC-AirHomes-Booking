@@ -1,8 +1,16 @@
 import React from 'react';
+import Calendar from './Calendar.jsx';
 
 const checking = {
   marginTop: '16px',
   marginBottom: '8px',
+};
+
+const checkingDiv = {
+  position: 'relative',
+  display: 'block',
+  fontWeight: '600',
+  boxSizing: 'border-box',
 };
 
 const checkingForms = {
@@ -30,6 +38,7 @@ const checkingCell = {
 };
 
 const formDiv = {
+  boxSizing: 'border-box',
   fontWeight: 'normal',
   fontSize: '17px',
   lineHeight: '24px',
@@ -110,37 +119,61 @@ class CheckingForm extends React.Component {
     document.addEventListener('mousedown', this.handleClick, false);
   }
 
+  openCheckInCalendar = (e) => {
+    this.setState({ checkInActive: true });
+  }
+
+  openCheckoutCalendar = (e) => {
+    this.setState({ checkoutActive: true });
+  }
+
   render() {
     const { checkInActive, checkoutActive } = this.state;
-    const { checkIn, checkout, onInputCheckInChange, onInputCheckoutChange } = this.props;
+    const { checkIn, checkout, onInputCheckInChange, onInputCheckoutChange, bookings, finalDate, minNights, maxNights, getBookedDates } = this.props;
 
     return (
       <div style={checking}>
         <span style={font12}>Dates</span>
-        <div style={checkingForms}>
-          <div style={checkingRow}>
-            <div style={checkingCell}>
-              <div style={formDiv}>
-                <input style={checkForm} type="text" id="checkin" name="checkin" value={checkIn} onChange={(e) => onInputCheckInChange(e)} />
-                <svg role="presentation" focusable="false" style={svgStyle}>
-                  <path style={pathOne} d="M0,10 20,10 10,0z" />
-                  <path style={pathTwo} d="M0,10 10,0 20,10" />
-                </svg>
-                <div style={checkInActive ? activeText : inactiveText}>{checkIn}</div>
+        <div style={checkingDiv}>
+          <div style={checkingForms}>
+            <div style={checkingRow}>
+              <div style={checkingCell} onClick={e => this.openCheckInCalendar(e)}>
+                <div style={formDiv}>
+                  <input style={checkForm} type="text" id="checkin" name="checkin" value={checkIn} onChange={(e) => onInputCheckInChange(e)} />
+                  {
+                  checkInActive && (
+                  <svg role="presentation" focusable="false" style={svgStyle}>
+                    <path style={pathOne} d="M0,10 20,10 10,0z" />
+                    <path style={pathTwo} d="M0,10 10,0 20,10" />
+                  </svg>
+                  )}
+                  <div style={checkInActive ? activeText : inactiveText}>{checkIn}</div>
+                </div>
               </div>
-            </div>
-            <div style={arrowContainer}>
-              <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style={arrow}><path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 0 0 0 -.5.5z" fillRule="evenodd" /></svg>
-            </div>
-            <div style={checkingCell}>
-              <div style={formDiv}>
-                <input style={checkForm} type="text" id="checkout" name="checkout" value={checkout} onChange={e => onInputCheckoutChange(e)} />
-                <svg role="presentation" focusable="false" style={svgStyle}>
-                  <path style={pathOne} d="M0,10 20,10 10,0z" />
-                  <path style={pathTwo} d="M0,10 10,0 20,10" />
-                </svg>
-                <div style={checkoutActive ? activeText : inactiveText}>{checkout}</div>
+              {
+              checkInActive && (
+              <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+              )}
+              <div style={arrowContainer}>
+                <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style={arrow}><path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 0 0 0 -.5.5z" fillRule="evenodd" /></svg>
               </div>
+              <div style={checkingCell} onClick={e => this.openCheckoutCalendar(e)}>
+                <div style={formDiv}>
+                  <input style={checkForm} type="text" id="checkout" name="checkout" value={checkout} onChange={e => onInputCheckoutChange(e)} />
+                  {
+                  checkoutActive && (
+                  <svg role="presentation" focusable="false" style={svgStyle}>
+                    <path style={pathOne} d="M0,10 20,10 10,0z" />
+                    <path style={pathTwo} d="M0,10 10,0 20,10" />
+                  </svg>
+                  )}
+                  <div style={checkoutActive ? activeText : inactiveText}>{checkout}</div>
+                </div>
+              </div>
+              {
+              checkoutActive && (
+              <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+              )}
             </div>
           </div>
         </div>

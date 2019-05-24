@@ -3,11 +3,11 @@ import moment from 'moment';
 import style from 'styled-components';
 
 const calendarContainer = {
-  // zIndex: '1',
-  // backgroundColor: '#fff',
-  // position: 'absolute',
-  // top: '51px',
-  // left: '0px',
+  zIndex: '1',
+  backgroundColor: '#fff',
+  position: 'absolute',
+  top: '51px',
+  left: '0px',
   boxSizing: 'border-box',
 };
 
