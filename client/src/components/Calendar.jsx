@@ -191,7 +191,18 @@ const SelectedDay = style.td`
   width: 39px;
   height: 39px;
   color: #fff;
+  border: 1px double rgb(0, 166, 153);
   background: rgb(0, 166, 153);
+`;
+
+const bookHoverStyle = style.td`
+  display: table-cell;
+  box-sizing: border-box;
+  width: 39px;
+  height: 39px;
+  color: #fff;
+  border: 1px double rgb(128, 232, 224);
+  background: rgb(178, 241, 236);
 `;
 
 const Day = style.td`
@@ -328,7 +339,7 @@ class Calendar extends React.Component {
       dateObj: moment(),
       bookStartDate: null,
       bookDates: [],
-      bookHover: [],
+      bookHoverDates: [],
       minNightBlackoutDates: [],
     };
   }
@@ -340,6 +351,27 @@ class Calendar extends React.Component {
         this.minNightBlackout(id);
       });
   }
+
+  onHoverBook = (e) => {
+    const { id } = e.currentTarget;
+    const split = id.split('-');
+    const [year, month, day] = split;
+    const { minNights } = this.props;
+    const { bookStartDate } = this.state;
+    const bookHoverDates = [];
+
+    if (id === bookStartDate) {
+      const dayInt = parseInt(day);
+      for (let i = 1; i < minNights; i++) {
+        const hoverDay = dayInt + i;
+        if (hoverDay < 10) bookHoverDates.push(`${year}-${month}-0${hoverDay}`);
+        else bookHoverDates.push(`${year}-${month}-${hoverDay}`);
+      }
+      this.setState ({ bookHoverDates });
+    }
+  }
+
+  onHoverLeave = () => this.setState({ bookHoverDates: [] });
 
   minNightBlackout = (id) => {
     const { minNights } = this.props;
@@ -355,7 +387,7 @@ class Calendar extends React.Component {
       else minNightBlackoutDates.push(`${year}-${month}-${blackoutDay}`);
     }
 
-    this.setState({  minNightBlackoutDates });
+    this.setState({ minNightBlackoutDates });
   };
 
   onClearButton = () => this.setState({ bookStartDate: null, bookDates: [] });
@@ -388,8 +420,10 @@ class Calendar extends React.Component {
 
   createDays = () => {
     const days = [];
-    const { dateObj, currentDateObj, bookStartDate, minNightBlackoutDates } = this.state;
-    const { bookings, finalDate } = this.props;
+    const {
+      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates,
+    } = this.state;
+    const { bookings, finalDate, minNights } = this.props;
     const setMonth = dateObj.format('MM');
     const setMonthInt = parseInt(setMonth);
     const setYear = dateObj.format('YYYY');
@@ -397,7 +431,8 @@ class Calendar extends React.Component {
     const currentMonth = parseInt(currentDateObj.format('MM'));
     const currentYear = parseInt(currentDateObj.format('YYYY'));
     const currentDay = parseInt(currentDateObj.format('DD'));
-    const id = dateObj.format('YYYY-MM');
+    const yearId = parseInt(dateObj.format('YYYY'));
+    const monthId = parseInt(dateObj.format('MM'));
     let finalYear;
     let finalMonth;
     let finalDay;
@@ -411,13 +446,17 @@ class Calendar extends React.Component {
     }
 
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
-      const dayId = day < 10 ? `${id}-0${day}` : `${id}-${day}`;
+      const dayId = day < 10 ? `${yearId}-${monthId}-0${day}` : `${yearId}-${monthId}-${day}`;
       let blackout = true;
 
       if (bookings) blackout = bookings.includes(dayId);
+      for (let i = 1; i < minNights; i++) {
+        const checkDay = moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+        if (bookings.includes(checkDay)) blackout = true;
+      }
       if (dayId === bookStartDate) {
         days.push(
-          <SelectedDay id={dayId} key={day} onClick={this.onDayClick}>
+          <SelectedDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -446,7 +485,7 @@ class Calendar extends React.Component {
         );
       } else {
         days.push(
-          <Day id={dayId} key={day} onClick={this.onDayClick}>
+          <Day id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
