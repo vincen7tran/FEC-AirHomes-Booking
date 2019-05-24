@@ -375,22 +375,17 @@ class Calendar extends React.Component {
 
   minNightBlackout = (id) => {
     const { minNights } = this.props;
-    const dateSplit = id.split('-');
-    const year = dateSplit[0];
-    const month = dateSplit[1];
-    const day = parseInt(dateSplit[2]);
     const minNightBlackoutDates = [];
 
     for (let i = 1; i < minNights; i++) {
-      const blackoutDay = day + i;
-      if (blackoutDay < 10) minNightBlackoutDates.push(`${year}-${month}-0${blackoutDay}`);
-      else minNightBlackoutDates.push(`${year}-${month}-${blackoutDay}`);
+      const blackoutDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+      minNightBlackoutDates.push(blackoutDay);
     }
 
     this.setState({ minNightBlackoutDates });
   };
 
-  onClearButton = () => this.setState({ bookStartDate: null, bookDates: [] });
+  onClearButton = () => this.setState({ bookStartDate: null, bookDates: [], minNightBlackoutDates: [] });
 
   setMonth = (next) => {
     const { dateObj } = this.state;
@@ -431,8 +426,8 @@ class Calendar extends React.Component {
     const currentMonth = parseInt(currentDateObj.format('MM'));
     const currentYear = parseInt(currentDateObj.format('YYYY'));
     const currentDay = parseInt(currentDateObj.format('DD'));
-    const yearId = parseInt(dateObj.format('YYYY'));
-    const monthId = parseInt(dateObj.format('MM'));
+    const yearId = dateObj.format('YYYY');
+    const monthId = dateObj.format('MM');
     let finalYear;
     let finalMonth;
     let finalDay;
@@ -448,11 +443,14 @@ class Calendar extends React.Component {
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
       const dayId = day < 10 ? `${yearId}-${monthId}-0${day}` : `${yearId}-${monthId}-${day}`;
       let blackout = true;
-
-      if (bookings) blackout = bookings.includes(dayId);
-      for (let i = 1; i < minNights; i++) {
-        const checkDay = moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
-        if (bookings.includes(checkDay)) blackout = true;
+      if (bookings) {
+        blackout = bookings.includes(dayId);
+      }
+      if (!bookStartDate) {
+        for (let i = 1; i <= minNights; i++) {
+          const checkDay = moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+          if (bookings.includes(checkDay)) blackout = true;
+        }
       }
       if (dayId === bookStartDate) {
         days.push(
