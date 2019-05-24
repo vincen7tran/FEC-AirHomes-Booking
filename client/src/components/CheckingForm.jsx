@@ -239,24 +239,35 @@ class CheckingForm extends React.Component {
 
   onDayClick = (e) => {
     const { getBookedDates } = this.props;
-    const { bookStartDate } = this.state;
+    const { bookStartDate, checkInActive, checkoutActive } = this.state;
     const { id } = e.currentTarget;
 
-    if (!bookStartDate) {
+    if (checkInActive) {
       this.setState(({ bookStartDate: id }),
         () => {
-          this.minNightBlackout(id);
-          this.findFinalAvail(id);
-
           const { bookStartDate, bookFinalDate } = this.state;
+
+          if (bookStartDate && bookFinalDate) {
+            this.bookDates();
+          } else {
+            this.minNightBlackout(id, true);
+            this.findFinalAvail(id, true);
+            this.setState({ checkInActive: false, checkoutActive: true });
+          }
           getBookedDates(bookStartDate, bookFinalDate);
         });
-    } else {
+    } else if (checkoutActive) {
       this.setState({ bookFinalDate: id },
         () => {
-          this.bookDates();
-
           const { bookStartDate, bookFinalDate } = this.state;
+          if (bookStartDate && bookFinalDate) {
+            this.bookDates();
+          } else {
+            this.minNightBlackout(id, false);
+            this.findFinalAvail(id, false);
+            this.setState({ checkInActive: true, checkoutActive: false });
+          }
+
           getBookedDates(bookStartDate, bookFinalDate);
         });
     }
@@ -265,18 +276,32 @@ class CheckingForm extends React.Component {
   onHoverBook = (e) => {
     let { id } = e.currentTarget;
     const { minNights } = this.props;
-    const { bookStartDate } = this.state;
+    const { bookStartDate, bookFinalDate } = this.state;
     const bookHoverDates = [];
 
-    if (id === bookStartDate) {
-      for (let i = 1; i < minNights; i++) {
-        const hoverDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
-        bookHoverDates.push(hoverDay);
+    if (bookStartDate) {
+      if (id === bookStartDate) {
+        for (let i = 1; i < minNights; i++) {
+          const hoverDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+          bookHoverDates.push(hoverDay);
+        }
+      } else {
+        while (id !== bookStartDate) {
+          bookHoverDates.push(id);
+          id = moment(id, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
+        }
       }
-    } else {
-      while (id !== bookStartDate) {
-        bookHoverDates.push(id);
-        id = moment(id, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
+    } else if (bookFinalDate) {
+      if (id === bookFinalDate) {
+        for (let i = 1; i < minNights; i++) {
+          const hoverDay = moment(id, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
+          bookHoverDates.push(hoverDay);
+        }
+      } else {
+        while (id !== bookFinalDate) {
+          bookHoverDates.push(id);
+          id = moment(id, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+        }
       }
     }
     this.setState({ bookHoverDates });
@@ -284,25 +309,28 @@ class CheckingForm extends React.Component {
 
   onHoverLeave = () => this.setState({ bookHoverDates: [] });
 
-  minNightBlackout = (id) => {
+  minNightBlackout = (id, isCalOne) => {
     const { minNights } = this.props;
     const minNightBlackoutDates = [];
 
     for (let i = 1; i < minNights - 1; i++) {
-      const blackoutDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+      const blackoutDay = isCalOne ? moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(id, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
       minNightBlackoutDates.push(blackoutDay);
     }
 
     this.setState({ minNightBlackoutDates });
   };
 
-  findFinalAvail = (id) => {
+  findFinalAvail = (id, isCalOne) => {
     let bookFinalAvail = id;
+    const { currentDateObj } = this.state;
     const { bookings } = this.props;
+    const currentDate = currentDateObj.format('YYYY-MM-DD');
 
-    while (!bookings.includes(bookFinalAvail)) {
-      bookFinalAvail = moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+    while (isCalOne ? !bookings.includes(bookFinalAvail) : currentDate !== bookFinalAvail) {
+      bookFinalAvail = isCalOne ? moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD') : moment(bookFinalAvail, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
     }
+
     this.setState({ bookFinalAvail });
   }
 
@@ -316,7 +344,9 @@ class CheckingForm extends React.Component {
       id = moment(id, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
     }
 
-    this.setState({ bookDates });
+    this.setState({ bookDates }, () => {
+      this.closeModal();
+    });
   }
 
   onClearButton = () => {
@@ -366,6 +396,7 @@ class CheckingForm extends React.Component {
       dateObj,
       currentDateObj,
       bookStartDate,
+      bookFinalDate,
       minNightBlackoutDates,
       bookHoverDates,
       bookFinalAvail,
@@ -376,23 +407,34 @@ class CheckingForm extends React.Component {
     const setMonthInt = parseInt(setMonth);
     const setYear = dateObj.format('YYYY');
     const setYearInt = parseInt(setYear);
-    const initMonth = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('MM')) : parseInt(currentDateObj.format('MM'));
-    const initYear = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('YYYY')) : parseInt(currentDateObj.format('YYYY'));
-    const initDay = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('DD')) : parseInt(currentDateObj.format('DD'));
+    let initMonth = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('MM')) : parseInt(currentDateObj.format('MM'));
+    let initYear = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('YYYY')) : parseInt(currentDateObj.format('YYYY'));
+    let initDay = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('DD')) : parseInt(currentDateObj.format('DD'));
     const yearId = dateObj.format('YYYY');
     const monthId = dateObj.format('MM');
     let finalYear;
     let finalMonth;
     let finalDay;
+    let finalSplit;
 
-    if (finalDate || bookFinalAvail) {
+    if (bookFinalDate && !bookStartDate) {
+      finalSplit = bookFinalDate.split('-');
+      if (bookFinalAvail) {
+        const availSplit = bookFinalAvail.split('-');
+        [initYear, initMonth, initDay] = availSplit;
+        initYear = parseInt(initYear);
+        initMonth = parseInt(initMonth);
+        initDay = parseInt(initDay);
+      }
+    } else if (finalDate || bookFinalAvail) {
       const useThisDate = bookFinalAvail || finalDate;
-      const finalSplit = useThisDate.split('-');
-      [finalYear, finalMonth, finalDay] = finalSplit;
-      finalYear = parseInt(finalYear);
-      finalMonth = parseInt(finalMonth);
-      finalDay = parseInt(finalDay);
+      finalSplit = useThisDate.split('-');
     }
+
+    [finalYear, finalMonth, finalDay] = finalSplit;
+    finalYear = parseInt(finalYear);
+    finalMonth = parseInt(finalMonth);
+    finalDay = parseInt(finalDay);
 
     for (let day = 1; day <= dateObj.daysInMonth(); day++) {
       const dayId = day < 10 ? `${yearId}-${monthId}-0${day}` : `${yearId}-${monthId}-${day}`;
@@ -400,14 +442,14 @@ class CheckingForm extends React.Component {
       if (bookings) {
         blackout = bookings.includes(dayId);
       }
-      if (!bookStartDate) {
-        for (let i = 1; i <= minNights; i++) {
-          const checkDay = calId === 'checkInCal' ? moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(dayId, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
+      if (!bookStartDate && !bookFinalDate) {
+        for (let i = 1; i < minNights; i++) {
+          const checkDay = calId === 'checkIn' ? moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(dayId, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
 
           if (bookings.includes(checkDay)) blackout = true;
         }
       }
-      if (dayId === bookStartDate || bookDates.includes(dayId)) {
+      if (dayId === bookStartDate || bookDates.includes(dayId) || dayId === bookFinalDate) {
         days.push(
           <SelectedDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
             <div style={dayDiv}>
@@ -419,7 +461,7 @@ class CheckingForm extends React.Component {
         );
       } else if (bookHoverDates.includes(dayId)) {
         days.push(
-          <HoverDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
+          <HoverDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -448,7 +490,7 @@ class CheckingForm extends React.Component {
         );
       } else {
         days.push(
-          <Day id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
+          <Day id={dayId} key={day} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -504,7 +546,7 @@ class CheckingForm extends React.Component {
   }
 
   render() {
-    const { checkInActive, checkoutActive, dateObj, bookStartDate } = this.state;
+    const { checkInActive, checkoutActive, dateObj, bookStartDate, bookFinalDate } = this.state;
     const { checkIn, checkout, onInputCheckInChange, onInputCheckoutChange, bookings, finalDate, minNights, maxNights, getBookedDates } = this.props;
 
     return (
@@ -531,7 +573,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calOne = node; }}>
                 {
                 checkInActive && (
-                <Calendar calId="checkIn" bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkIn" bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
               <div style={arrowContainer}>
@@ -555,7 +597,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calTwo = node; }}>
                 {
                 checkoutActive && (
-                <Calendar calId="checkout" bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkout" bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
             </div>
