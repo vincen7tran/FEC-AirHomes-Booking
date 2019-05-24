@@ -208,7 +208,7 @@ const questionPadding = {
 };
 
 const Calendar = (props) => {
-  const { dateObj, bookStartDate, setMonth, createTable, onClearButton, calId } = props;
+  const { dateObj, bookStartDate, bookFinalDate, setMonth, createTable, onClearButton, calId } = props;
   const currentMonth = dateObj.format('MMMM');
   const currentYear = dateObj.format('YYYY');
 
@@ -266,7 +266,7 @@ const Calendar = (props) => {
             </div>
           </div>
           <div style={questionPadding}>
-            { bookStartDate && (
+            { (bookStartDate || bookFinalDate) && (
             <div style={clearDiv}>
               <button type="button" style={clearButton} onClick={onClearButton}>Clear dates</button>
             </div>
