@@ -112,19 +112,30 @@ class CheckingForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { checkIn: 'Check-In', checkout: 'Checkout', checkInActive: false, checkoutActive: false };
+    this.state = { checkInActive: false, checkoutActive: false };
   }
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClick, false);
   }
 
+  handleClick = (e) => {
+    if (
+      !this.svgOne.contains(e.target)
+        && !this.svgTwo.contains(e.target)
+        && !this.calOne.contains(e.target)
+        && !this.calTwo.contains(e.target)
+    ) this.closeModal();
+  }
+
+  closeModal = () => this.setState({ checkInActive: false, checkoutActive: false });
+
   openCheckInCalendar = (e) => {
-    this.setState({ checkInActive: true });
+    this.setState({ checkInActive: true, checkoutActive: false });
   }
 
   openCheckoutCalendar = (e) => {
-    this.setState({ checkoutActive: true });
+    this.setState({ checkoutActive: true, checkInActive: false });
   }
 
   render() {
@@ -140,40 +151,48 @@ class CheckingForm extends React.Component {
               <div style={checkingCell} onClick={e => this.openCheckInCalendar(e)}>
                 <div style={formDiv}>
                   <input style={checkForm} type="text" id="checkin" name="checkin" value={checkIn} onChange={(e) => onInputCheckInChange(e)} />
-                  {
-                  checkInActive && (
-                  <svg role="presentation" focusable="false" style={svgStyle}>
-                    <path style={pathOne} d="M0,10 20,10 10,0z" />
-                    <path style={pathTwo} d="M0,10 10,0 20,10" />
-                  </svg>
-                  )}
+                  <div ref={(node) => { this.svgOne = node; }}>
+                    {
+                    checkInActive && (
+                    <svg role="presentation" focusable="false" style={svgStyle}>
+                      <path style={pathOne} d="M0,10 20,10 10,0z" />
+                      <path style={pathTwo} d="M0,10 10,0 20,10" />
+                    </svg>
+                    )}
+                  </div>
                   <div style={checkInActive ? activeText : inactiveText}>{checkIn}</div>
                 </div>
               </div>
-              {
-              checkInActive && (
-              <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
-              )}
+              <div ref={(node) => { this.calOne = node; }}>
+                {
+                checkInActive && (
+                <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                )}
+              </div>
               <div style={arrowContainer}>
                 <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style={arrow}><path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 0 0 0 -.5.5z" fillRule="evenodd" /></svg>
               </div>
               <div style={checkingCell} onClick={e => this.openCheckoutCalendar(e)}>
                 <div style={formDiv}>
                   <input style={checkForm} type="text" id="checkout" name="checkout" value={checkout} onChange={e => onInputCheckoutChange(e)} />
-                  {
-                  checkoutActive && (
-                  <svg role="presentation" focusable="false" style={svgStyle}>
-                    <path style={pathOne} d="M0,10 20,10 10,0z" />
-                    <path style={pathTwo} d="M0,10 10,0 20,10" />
-                  </svg>
-                  )}
+                  <div ref={(node) => { this.svgTwo = node; }}>
+                    {
+                    checkoutActive && (
+                    <svg role="presentation" focusable="false" style={svgStyle}>
+                      <path style={pathOne} d="M0,10 20,10 10,0z" />
+                      <path style={pathTwo} d="M0,10 10,0 20,10" />
+                    </svg>
+                    )}
+                  </div>
                   <div style={checkoutActive ? activeText : inactiveText}>{checkout}</div>
                 </div>
               </div>
-              {
-              checkoutActive && (
-              <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
-              )}
+              <div ref={(node) => { this.calTwo = node; }}>
+                {
+                checkoutActive && (
+                <Calendar bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                )}
+              </div>
             </div>
           </div>
         </div>
