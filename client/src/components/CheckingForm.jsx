@@ -241,7 +241,7 @@ class CheckingForm extends React.Component {
     const { getBookedDates } = this.props;
     const { bookStartDate } = this.state;
     const { id } = e.currentTarget;
-    
+
     if (!bookStartDate) {
       this.setState(({ bookStartDate: id }),
         () => {
@@ -363,16 +363,22 @@ class CheckingForm extends React.Component {
   createDays = () => {
     const days = [];
     const {
-      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates, bookHoverDates, bookFinalAvail, bookDates,
+      dateObj,
+      currentDateObj,
+      bookStartDate,
+      minNightBlackoutDates,
+      bookHoverDates,
+      bookFinalAvail,
+      bookDates,
     } = this.state;
     const { bookings, finalDate, minNights } = this.props;
     const setMonth = dateObj.format('MM');
     const setMonthInt = parseInt(setMonth);
     const setYear = dateObj.format('YYYY');
     const setYearInt = parseInt(setYear);
-    const currentMonth = parseInt(currentDateObj.format('MM'));
-    const currentYear = parseInt(currentDateObj.format('YYYY'));
-    const currentDay = parseInt(currentDateObj.format('DD'));
+    const initMonth = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('MM')) : parseInt(currentDateObj.format('MM'));
+    const initYear = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('YYYY')) : parseInt(currentDateObj.format('YYYY'));
+    const initDay = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('DD')) : parseInt(currentDateObj.format('DD'));
     const yearId = dateObj.format('YYYY');
     const monthId = dateObj.format('MM');
     let finalYear;
@@ -423,9 +429,9 @@ class CheckingForm extends React.Component {
       } else if (
         blackout
         || minNightBlackoutDates.includes(dayId)
-        || setYearInt < currentYear
-        || (setYearInt === currentYear && setMonthInt < currentMonth)
-        || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)
+        || setYearInt < initYear
+        || (setYearInt === initYear && setMonthInt < initMonth)
+        || (setYearInt === initYear && setMonthInt === initMonth && day < initDay)
         || setYearInt > finalYear
         || (setYearInt === finalYear && setMonthInt > finalMonth)
         || (setYearInt === finalYear && setMonthInt === finalMonth && day > finalDay)

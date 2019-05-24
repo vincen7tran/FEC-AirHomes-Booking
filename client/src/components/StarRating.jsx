@@ -5,7 +5,7 @@ const StarContainer = styled.button`
   margin-top: 3px;
   display: flex;
   cursor: pointer;
-  align-items: start;
+  align-items: center;
   font-size: 0.5em;
   justify-content: left;
   padding: 0;
@@ -26,6 +26,7 @@ const backStars = {
 const font12 = {
   fontSize: '12px',
   marginLeft: '3px',
+  marginTop: '2px',
 };
 
 const StarRating = (props) => {
