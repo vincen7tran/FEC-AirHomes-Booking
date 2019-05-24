@@ -360,7 +360,7 @@ class CheckingForm extends React.Component {
     return blanks;
   }
 
-  createDays = () => {
+  createDays = (calId) => {
     const days = [];
     const {
       dateObj,
@@ -402,7 +402,8 @@ class CheckingForm extends React.Component {
       }
       if (!bookStartDate) {
         for (let i = 1; i <= minNights; i++) {
-          const checkDay = moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+          const checkDay = calId === 'checkInCal' ? moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(dayId, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
+
           if (bookings.includes(checkDay)) blackout = true;
         }
       }
@@ -460,8 +461,8 @@ class CheckingForm extends React.Component {
     return days;
   }
 
-  createTable = () => {
-    const days = this.createDays();
+  createTable = (calId) => {
+    const days = this.createDays(calId);
     const blanks = this.createBlanks();
 
     const totalSlots = [...blanks, ...days];
@@ -530,7 +531,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calOne = node; }}>
                 {
                 checkInActive && (
-                <Calendar bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkIn" bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
               <div style={arrowContainer}>
@@ -554,7 +555,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calTwo = node; }}>
                 {
                 checkoutActive && (
-                <Calendar bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkout" bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
             </div>
