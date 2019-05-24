@@ -356,20 +356,16 @@ class Calendar extends React.Component {
 
   onHoverBook = (e) => {
     const { id } = e.currentTarget;
-    const split = id.split('-');
-    const [year, month, day] = split;
     const { minNights } = this.props;
     const { bookStartDate } = this.state;
     const bookHoverDates = [];
 
     if (id === bookStartDate) {
-      const dayInt = parseInt(day);
       for (let i = 1; i < minNights; i++) {
-        const hoverDay = dayInt + i;
-        if (hoverDay < 10) bookHoverDates.push(`${year}-${month}-0${hoverDay}`);
-        else bookHoverDates.push(`${year}-${month}-${hoverDay}`);
+        const hoverDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
+        bookHoverDates.push(hoverDay);
       }
-      this.setState ({ bookHoverDates });
+      this.setState({ bookHoverDates });
     }
   }
 
@@ -379,7 +375,7 @@ class Calendar extends React.Component {
     const { minNights } = this.props;
     const minNightBlackoutDates = [];
 
-    for (let i = 1; i < minNights; i++) {
+    for (let i = 1; i < minNights - 1; i++) {
       const blackoutDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
       minNightBlackoutDates.push(blackoutDay);
     }
