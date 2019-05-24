@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import style from 'styled-components';
 
 const calendarContainer = {
@@ -111,25 +110,6 @@ const svgArrow = {
   display: 'block',
 };
 
-// const transition = {
-//   width: '332px',
-//   height: '308px',
-//   position: 'relative',
-//   overflow: 'hidden',
-//   borderRadius: '3px',
-//   transition: 'height 0.2s ease-in-out 0s',
-// };
-
-// const transform = {
-//   transform: 'translateX(0px)',
-//   width: '942px',
-//   textAlign: 'left',
-//   zIndex: '0',
-//   position: 'absolute',
-//   left: '9px',
-//   background: '#fff',
-// };
-
 const calendar = {
   display: 'block',
   verticalAlign: 'top',
@@ -163,111 +143,6 @@ const tbodyStyle = {
   display: 'table-row-group',
   verticalAlign: 'middle',
   borderColor: 'inherit',
-};
-
-const blankStyle = {
-  display: 'table-cell',
-  width: '39px',
-  height: '39px',
-};
-
-const tdDayStyle = {
-  display: 'table-cell',
-  boxSizing: 'border-box',
-  pointer: 'cursor',
-  fontSize: '14px',
-  textAlign: 'center',
-  verticalAlign: 'inherit',
-  width: '39px',
-  height: '39px',
-  border: '1px solid #e4e7e7',
-  color: '#484848',
-  background: '#fff',
-};
-
-const SelectedDay = style.td`
-  display: table-cell;
-  box-sizing: border-box;
-  width: 39px;
-  height: 39px;
-  color: #fff;
-  border: 1px double rgb(0, 166, 153);
-  background: rgb(0, 166, 153);
-`;
-
-const HoverDay = style.td`
-  display: table-cell;
-  box-sizing: border-box;
-  width: 39px;
-  height: 39px;
-  color: #fff;
-  border: 1px double rgb(128, 232, 224);
-  background: rgb(178, 241, 236);
-`;
-
-const Day = style.td`
-  display: table-cell;
-  box-sizing: border-box;
-  cursor: pointer;
-  font-size: 14px;
-  text-align: center;
-  vertical-align: inherit;
-  width: 39px;
-  height: 39px;
-  border: 1px solid #e4e7e7;
-  color: #484848;
-  background: #fff;
-
-  &:hover {
-    color: inherit;
-    background: rgb(228, 231, 231);
-  }
-`;
-
-const dayDiv = {
-  height: '38px',
-  width: '38px',
-  position: 'relative',
-  margin: '0',
-};
-
-const dayPadding = {
-  paddingBottom: '13px',
-  paddingTop: '13px',
-  fontSize: '14px',
-};
-
-const dayText = {
-  fontWeight: '700',
-  height: '12px',
-  lineHeight: '12px',
-  textAlign: 'center',
-  width: '38px',
-  color: 'inherit',
-};
-
-const blackoutDiv = {
-  height: '38px',
-  width: '38px',
-  position: 'relative',
-  color: '#d8d8d8',
-  margin: '0',
-  textDecoration: 'line-through',
-};
-
-const blackoutPadding = {
-  paddingBottom: '13px',
-  paddingTop: '13px',
-  fontSize: '14px',
-};
-
-const blackoutText = {
-  fontWeight: '700',
-  height: '12px',
-  lineHeight: '12px',
-  textAlign: 'center',
-  width: '38px',
-  color: '#d8d8d8',
 };
 
 const QuestionButton = style.button`
@@ -324,341 +199,86 @@ const questionText = {
   position: 'absolute',
   bottom: '0px',
   right: '5px',
+  fontSize: '14px',
+  fontWeight: '600',
 };
 
 const questionPadding = {
   padding: '0px 24px 24px',
 };
 
-class Calendar extends React.Component {
-  constructor(props) {
-    super(props);
+const Calendar = (props) => {
+  const { dateObj, bookStartDate, setMonth, createTable, onClearButton } = props;
+  const currentMonth = dateObj.format('MMMM');
+  const currentYear = dateObj.format('YYYY');
 
-    this.state = {
-      currentDateObj: moment(),
-      dateObj: moment(),
-      bookStartDate: null,
-      bookFinalDate: null,
-      bookFinalAvail: null,
-      bookDates: [],
-      bookHoverDates: [],
-      minNightBlackoutDates: [],
-    };
-  }
-
-  onDayClick = (e) => {
-    const { getBookedDates } = this.props;
-    const { bookStartDate } = this.state;
-    const { id } = e.currentTarget;
-    
-    if (!bookStartDate) {
-      this.setState(({ bookStartDate: id }),
-        () => {
-          this.minNightBlackout(id);
-          this.findFinalAvail(id);
-
-          const { bookStartDate, bookFinalDate } = this.state;
-          getBookedDates(bookStartDate, bookFinalDate);
-        });
-    } else {
-      this.setState({ bookFinalDate: id },
-        () => {
-          this.bookDates();
-
-          const { bookStartDate, bookFinalDate } = this.state;
-          getBookedDates(bookStartDate, bookFinalDate);
-        });
-    }
-  }
-
-  onHoverBook = (e) => {
-    let { id } = e.currentTarget;
-    const { minNights } = this.props;
-    const { bookStartDate } = this.state;
-    const bookHoverDates = [];
-
-    if (id === bookStartDate) {
-      for (let i = 1; i < minNights; i++) {
-        const hoverDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
-        bookHoverDates.push(hoverDay);
-      }
-    } else {
-      while (id !== bookStartDate) {
-        bookHoverDates.push(id);
-        id = moment(id, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
-      }
-    }
-    this.setState({ bookHoverDates });
-  }
-
-  onHoverLeave = () => this.setState({ bookHoverDates: [] });
-
-  minNightBlackout = (id) => {
-    const { minNights } = this.props;
-    const minNightBlackoutDates = [];
-
-    for (let i = 1; i < minNights - 1; i++) {
-      const blackoutDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
-      minNightBlackoutDates.push(blackoutDay);
-    }
-
-    this.setState({ minNightBlackoutDates });
-  };
-
-  findFinalAvail = (id) => {
-    let bookFinalAvail = id;
-    const { bookings } = this.props;
-
-    while (!bookings.includes(bookFinalAvail)) {
-      bookFinalAvail = moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    }
-    this.setState({ bookFinalAvail });
-  }
-
-  bookDates = () => {
-    const { bookStartDate, bookFinalDate } = this.state;
-    let id = bookStartDate;
-    const bookDates = [];
-
-    while (id <= bookFinalDate) {
-      bookDates.push(id);
-      id = moment(id, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    }
-
-    this.setState({ bookDates });
-  }
-
-  onClearButton = () => {
-    this.setState({
-      bookStartDate: null,
-      bookFinalDate: null,
-      bookFinalAvail: null,
-      bookDates: [],
-      minNightBlackoutDates: [],
-      bookHoverDates: [],
-    },
-    () => {
-      const { getBookedDates } = this.props;
-      getBookedDates(null, null);
-    });
-  }
-
-  setMonth = (next) => {
-    const { dateObj } = this.state;
-    const currentMonth = dateObj.month();
-    let newDateObj = Object.assign({}, dateObj);
-
-    if (next) newDateObj = moment(newDateObj).set('month', currentMonth + 1);
-    else newDateObj = moment(newDateObj).set('month', currentMonth - 1);
-
-    this.setState({ dateObj: newDateObj });
-  }
-
-  getFirstDayOfMonth = () => {
-    const { dateObj } = this.state;
-    return moment(dateObj).startOf('month').format('d');
-  }
-
-  createBlanks = () => {
-    const blanks = [];
-    for (let i = 0; i < this.getFirstDayOfMonth(); i++) {
-      blanks.push(
-        <td style={blankStyle} />
-      );
-    }
-    return blanks;
-  }
-
-  createDays = () => {
-    const days = [];
-    const {
-      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates, bookHoverDates, bookFinalAvail, bookDates,
-    } = this.state;
-    const { bookings, finalDate, minNights } = this.props;
-    const setMonth = dateObj.format('MM');
-    const setMonthInt = parseInt(setMonth);
-    const setYear = dateObj.format('YYYY');
-    const setYearInt = parseInt(setYear);
-    const currentMonth = parseInt(currentDateObj.format('MM'));
-    const currentYear = parseInt(currentDateObj.format('YYYY'));
-    const currentDay = parseInt(currentDateObj.format('DD'));
-    const yearId = dateObj.format('YYYY');
-    const monthId = dateObj.format('MM');
-    let finalYear;
-    let finalMonth;
-    let finalDay;
-
-    if (finalDate || bookFinalAvail) {
-      const useThisDate = bookFinalAvail || finalDate;
-      const finalSplit = useThisDate.split('-');
-      [finalYear, finalMonth, finalDay] = finalSplit;
-      finalYear = parseInt(finalYear);
-      finalMonth = parseInt(finalMonth);
-      finalDay = parseInt(finalDay);
-    }
-
-    for (let day = 1; day <= dateObj.daysInMonth(); day++) {
-      const dayId = day < 10 ? `${yearId}-${monthId}-0${day}` : `${yearId}-${monthId}-${day}`;
-      let blackout = true;
-      if (bookings) {
-        blackout = bookings.includes(dayId);
-      }
-      if (!bookStartDate) {
-        for (let i = 1; i <= minNights; i++) {
-          const checkDay = moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
-          if (bookings.includes(checkDay)) blackout = true;
-        }
-      }
-      if (dayId === bookStartDate || bookDates.includes(dayId)) {
-        days.push(
-          <SelectedDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
-            <div style={dayDiv}>
-              <div style={dayPadding}>
-                <div style={dayText}>{day}</div>
-              </div>
+  return (
+    <div style={calendarContainer}>
+      <div style={calendarDiv}>
+        <div style={daysContainer}>
+          <div style={daysDiv}>
+            <ul style={ulStyle}>
+              <li style={liStyle}>
+                <small style={smallStyle}>Su</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>Mo</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>Tu</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>We</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>Th</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>Fr</small>
+              </li>
+              <li style={liStyle}>
+                <small style={smallStyle}>Sa</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div tabIndex="-1" style={region}>
+          <div style={zeroHeight}>
+            <div style={leftButton} onClick={() => setMonth(false)}>
+              <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M336.2 274.5l-210.1 210h805.4c13 0 23 10 23 23s-10 23-23 23H126.1l210.1 210.1c11 11 11 21 0 32-5 5-10 7-16 7s-11-2-16-7l-249.1-249c-11-11-11-21 0-32l249.1-249.1c21-21.1 53 10.9 32 32z" /></svg>
             </div>
-          </SelectedDay>
-        );
-      } else if (bookHoverDates.includes(dayId)) {
-        days.push(
-          <HoverDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
-            <div style={dayDiv}>
-              <div style={dayPadding}>
-                <div style={dayText}>{day}</div>
-              </div>
-            </div>
-          </HoverDay>
-        );
-      } else if (
-        blackout
-        || minNightBlackoutDates.includes(dayId)
-        || setYearInt < currentYear
-        || (setYearInt === currentYear && setMonthInt < currentMonth)
-        || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)
-        || setYearInt > finalYear
-        || (setYearInt === finalYear && setMonthInt > finalMonth)
-        || (setYearInt === finalYear && setMonthInt === finalMonth && day > finalDay)
-      ) {
-        days.push(
-          <td id={dayId} key={day} style={tdDayStyle}>
-            <div style={blackoutDiv}>
-              <div style={blackoutPadding}>
-                <div style={blackoutText}>{day}</div>
-              </div>
-            </div>
-          </td>
-        );
-      } else {
-        days.push(
-          <Day id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
-            <div style={dayDiv}>
-              <div style={dayPadding}>
-                <div style={dayText}>{day}</div>
-              </div>
-            </div>
-          </Day>
-        );
-      }
-    }
-    return days;
-  }
-
-  createTable = () => {
-    const days = this.createDays();
-    const blanks = this.createBlanks();
-
-    const totalSlots = [...blanks, ...days];
-    const table = [];
-    let tableRow = [];
-
-    totalSlots.forEach((slot, i) => {
-      if (i % 7 !== 0) tableRow.push(slot);
-      else {
-        table.push(tableRow);
-        tableRow = [];
-        tableRow.push(slot);
-      }
-      if (i === totalSlots.length - 1) table.push(tableRow);
-    });
-
-    const month = table.map(row => <tr>{row}</tr>);
-
-    return month;
-  }
-
-  render() {
-    const { dateObj, bookStartDate } = this.state;
-    const currentMonth = dateObj.format('MMMM');
-    const currentYear = dateObj.format('YYYY');
-
-    return (
-      <div style={calendarContainer}>
-        <div style={calendarDiv}>
-          <div style={daysContainer}>
-            <div style={daysDiv}>
-              <ul style={ulStyle}>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Su</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Mo</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Tu</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>We</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Th</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Fr</small>
-                </li>
-                <li style={liStyle}>
-                  <small style={smallStyle}>Sa</small>
-                </li>
-              </ul>
+            <div style={rightButton} onClick={() => setMonth(true)}>
+              <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z" /></svg>
             </div>
           </div>
-          <div tabIndex="-1" style={region}>
-            <div style={zeroHeight}>
-              <div style={leftButton} onClick={() => this.setMonth(false)}>
-                <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M336.2 274.5l-210.1 210h805.4c13 0 23 10 23 23s-10 23-23 23H126.1l210.1 210.1c11 11 11 21 0 32-5 5-10 7-16 7s-11-2-16-7l-249.1-249c-11-11-11-21 0-32l249.1-249.1c21-21.1 53 10.9 32 32z" /></svg>
-              </div>
-              <div style={rightButton} onClick={() => this.setMonth(true)}>
-                <svg style={svgArrow} focusable="false" viewBox="0 0 1000 1000"><path d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z" /></svg>
-              </div>
-            </div>
-            <div style={calendarHeight}>
-              <div style={calendar}>
-                <div style={calendarPadding}>
-                  <div style={monthTitle}>
-                    <strong>{`${currentMonth} ${currentYear}`}</strong>
-                  </div>
-                  <table style={tableStyle}>
-                    <tbody style={tbodyStyle}>
-                      {this.createTable()}
-                    </tbody>
-                  </table>
+          <div style={calendarHeight}>
+            <div style={calendar}>
+              <div style={calendarPadding}>
+                <div style={monthTitle}>
+                  <strong>{`${currentMonth} ${currentYear}`}</strong>
                 </div>
+                <table style={tableStyle}>
+                  <tbody style={tbodyStyle}>
+                    {createTable()}
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div style={questionPadding}>
-              { bookStartDate && (
-              <div style={clearDiv}>
-                <button type="button" style={clearButton} onClick={this.onClearButton}>Clear dates</button>
-              </div>
-              )}
-              <QuestionButton type="button">
-                <span style={questionText}>?</span>
-              </QuestionButton>
+          </div>
+          <div style={questionPadding}>
+            { bookStartDate && (
+            <div style={clearDiv}>
+              <button type="button" style={clearButton} onClick={onClearButton}>Clear dates</button>
             </div>
+            )}
+            <QuestionButton type="button">
+              <span style={questionText}>?</span>
+            </QuestionButton>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Calendar;
