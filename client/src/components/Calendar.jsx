@@ -355,7 +355,7 @@ class Calendar extends React.Component {
   }
 
   onHoverBook = (e) => {
-    const { id } = e.currentTarget;
+    let { id } = e.currentTarget;
     const { minNights } = this.props;
     const { bookStartDate } = this.state;
     const bookHoverDates = [];
@@ -365,8 +365,14 @@ class Calendar extends React.Component {
         const hoverDay = moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD');
         bookHoverDates.push(hoverDay);
       }
-      this.setState({ bookHoverDates });
+    } else {
+      while (id !== bookStartDate) {
+        console.log(id);
+        bookHoverDates.push(id);
+        id = moment(id, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
+      }
     }
+    this.setState({ bookHoverDates });
   }
 
   onHoverLeave = () => this.setState({ bookHoverDates: [] });
