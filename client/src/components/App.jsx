@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import Booking from './Booking.jsx';
 import Report from './Report.jsx';
 import ReportModal from './ReportModal.jsx';
@@ -12,7 +13,7 @@ const body = {
   top: '20px',
   margin: '0 auto',
   zIndex: '3',
-  fontFamily: 'Arial, Helvetica, sans-serif',
+  fontFamily: 'Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif',
   color: '#484848',
 };
 
@@ -61,16 +62,36 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { listing: {}, hideSlide: true, hideReport: true };
+    this.state = {
+      listing: {},
+      hideSlide: true,
+      hideReport: true,
+      checkIn: 'Check-In',
+      checkout: 'Checkout',
+    };
   }
 
   componentDidMount() {
-    const id = Math.ceil(Math.random() * 200);
-    this.getListing(id)
+    //const id = Math.ceil(Math.random() * 200);
+    this.getListing(190)
       .then(({ data }) => this.setState({ listing: data[0] }));
 
     window.addEventListener('scroll', this.handleScroll);
     document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  getBookedDates = (checkInDate, checkoutDate) => {
+    const checkIn = checkInDate ? moment(checkInDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Check-In';
+    const checkout = checkoutDate ? moment(checkoutDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Checkout';
+    this.setState({ checkIn, checkout });
+  }
+
+  onInputCheckInChange = (e) => {
+    console.log(e.target.value);
+  }
+
+  onInputCheckoutChange = (e) => {
+    console.log(e.target.value);
   }
 
   handleClick = (e) => {
@@ -98,7 +119,7 @@ class App extends React.Component {
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing, hideSlide, hideReport } = this.state;
+    const { listing, hideSlide, hideReport, checkIn, checkout } = this.state;
 
     return (
       <div style={body}>
@@ -114,7 +135,7 @@ class App extends React.Component {
                   <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
-              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} />
+              <Booking bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
               <Slider hidden={hideSlide} />
             </div>
           </div>
