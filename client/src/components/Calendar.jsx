@@ -328,13 +328,35 @@ class Calendar extends React.Component {
       dateObj: moment(),
       bookStartDate: null,
       bookDates: [],
+      bookHover: [],
+      minNightBlackoutDates: [],
     };
   }
 
   onDayClick = (e) => {
     const { id } = e.currentTarget;
-    this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }));
+    this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }),
+      () => {
+        this.minNightBlackout(id);
+      });
   }
+
+  minNightBlackout = (id) => {
+    const { minNights } = this.props;
+    const dateSplit = id.split('-');
+    const year = dateSplit[0];
+    const month = dateSplit[1];
+    const day = parseInt(dateSplit[2]);
+    const minNightBlackoutDates = [];
+
+    for (let i = 1; i < minNights; i++) {
+      const blackoutDay = day + i;
+      if (blackoutDay < 10) minNightBlackoutDates.push(`${year}-${month}-0${blackoutDay}`);
+      else minNightBlackoutDates.push(`${year}-${month}-${blackoutDay}`);
+    }
+
+    this.setState({  minNightBlackoutDates });
+  };
 
   onClearButton = () => this.setState({ bookStartDate: null, bookDates: [] });
 
@@ -366,7 +388,7 @@ class Calendar extends React.Component {
 
   createDays = () => {
     const days = [];
-    const { dateObj, currentDateObj, bookStartDate } = this.state;
+    const { dateObj, currentDateObj, bookStartDate, minNightBlackoutDates } = this.state;
     const { bookings, finalDate } = this.props;
     const setMonth = dateObj.format('MM');
     const setMonthInt = parseInt(setMonth);
@@ -405,6 +427,7 @@ class Calendar extends React.Component {
         );
       } else if (
         blackout
+        || minNightBlackoutDates.includes(dayId)
         || setYearInt < currentYear
         || (setYearInt === currentYear && setMonthInt < currentMonth)
         || (setYearInt === currentYear && setMonthInt === currentMonth && day < currentDay)
