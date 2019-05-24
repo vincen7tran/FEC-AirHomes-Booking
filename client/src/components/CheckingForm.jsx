@@ -30,6 +30,7 @@ const checkingCell = {
 };
 
 const formDiv = {
+  fontWeight: 'normal',
   fontSize: '17px',
   lineHeight: '24px',
   color: '#757575',
@@ -41,7 +42,14 @@ const formDiv = {
 };
 
 const checkForm = {
-  border: 'none',
+  fontSize: '16px',
+  opacity: '0',
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  height: '100%',
+  width: '100%',
+  borderWidth: '0',
 };
 
 const arrowContainer = {
@@ -57,22 +65,68 @@ const arrow = {
   fill: 'currentcolor',
 };
 
+const svgStyle = {
+  position: 'absolute',
+  width: '20px',
+  height: '10px',
+  left: '22px',
+  zIndex: '2',
+  top: '40px',
+};
+
+const pathOne = {
+  fill: '#fff',
+};
+
+const pathTwo = {
+  stroke: '#ebebeb',
+  fill: '#0000',
+};
+
+const inactiveText = {
+  whiteSpace: 'nowrap',
+  padding: '0 6px',
+  overflow: 'hidden',
+};
+
+const activeText = {
+  whiteSpace: 'nowrap',
+  color: 'rgb(0, 122, 135)',
+  padding: '0 6px',
+  overflow: 'hidden',
+  background: 'rgb(153, 237, 230)',
+  borderColor: 'rgb(153, 237, 230)',
+  borderRadius: '3px',
+};
+
 class CheckingForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { };
+    this.state = { checkIn: 'Check-In', checkout: 'Checkout', checkInActive: false, checkoutActive: false };
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
   }
 
   render() {
+    const { checkInActive, checkoutActive } = this.state;
+    const { checkIn, checkout, onInputCheckInChange, onInputCheckoutChange } = this.props;
+
     return (
       <div style={checking}>
-        <span style={font12}>Date</span>
+        <span style={font12}>Dates</span>
         <div style={checkingForms}>
           <div style={checkingRow}>
             <div style={checkingCell}>
               <div style={formDiv}>
-                <input style={checkForm} type="text" id="checkin" name="checkin" placeholder="Check-in" />
+                <input style={checkForm} type="text" id="checkin" name="checkin" value={checkIn} onChange={(e) => onInputCheckInChange(e)} />
+                <svg role="presentation" focusable="false" style={svgStyle}>
+                  <path style={pathOne} d="M0,10 20,10 10,0z" />
+                  <path style={pathTwo} d="M0,10 10,0 20,10" />
+                </svg>
+                <div style={checkInActive ? activeText : inactiveText}>{checkIn}</div>
               </div>
             </div>
             <div style={arrowContainer}>
@@ -80,7 +134,12 @@ class CheckingForm extends React.Component {
             </div>
             <div style={checkingCell}>
               <div style={formDiv}>
-                <input style={checkForm} type="text" id="checkout" name="checkout" placeholder="Checkout" />
+                <input style={checkForm} type="text" id="checkout" name="checkout" value={checkout} onChange={e => onInputCheckoutChange(e)} />
+                <svg role="presentation" focusable="false" style={svgStyle}>
+                  <path style={pathOne} d="M0,10 20,10 10,0z" />
+                  <path style={pathTwo} d="M0,10 10,0 20,10" />
+                </svg>
+                <div style={checkoutActive ? activeText : inactiveText}>{checkout}</div>
               </div>
             </div>
           </div>

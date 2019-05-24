@@ -433,8 +433,9 @@ class Calendar extends React.Component {
       bookStartDate: null,
       bookFinalDate: null,
       bookFinalAvail: null,
-      bookDates: [], 
+      bookDates: [],
       minNightBlackoutDates: [],
+      bookHoverDates: [],
     },
     () => {
       const { getBookedDates } = this.props;

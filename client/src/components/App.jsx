@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import Booking from './Booking.jsx';
 import Report from './Report.jsx';
 import ReportModal from './ReportModal.jsx';
@@ -62,7 +63,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { listing: {}, hideSlide: true, hideReport: true, checkIn: null, checkOut: null };
+    this.state = {
+      listing: {},
+      hideSlide: true,
+      hideReport: true,
+      checkIn: 'Check-In',
+      checkout: 'Checkout',
+    };
   }
 
   componentDidMount() {
@@ -74,8 +81,18 @@ class App extends React.Component {
     document.addEventListener('mousedown', this.handleClick, false);
   }
 
-  getBookedDates = (checkIn, checkOut) => {
-    this.setState({ checkIn, checkOut });
+  getBookedDates = (checkInDate, checkoutDate) => {
+    const checkIn = checkInDate ? moment(checkInDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Check-In';
+    const checkout = checkoutDate ? moment(checkoutDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Checkout';
+    this.setState({ checkIn, checkout });
+  }
+
+  onInputCheckInChange = (e) => {
+    console.log(e.target.value);
+  }
+
+  onInputCheckoutChange = (e) => {
+    console.log(e.target.value);
   }
 
   handleClick = (e) => {
@@ -103,7 +120,7 @@ class App extends React.Component {
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing, hideSlide, hideReport, checkIn, checkOut } = this.state;
+    const { listing, hideSlide, hideReport, checkIn, checkout } = this.state;
 
     return (
       <div style={body}>
@@ -119,7 +136,7 @@ class App extends React.Component {
                   <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
-              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkOut={checkOut} />
+              <Booking maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
               <Slider hidden={hideSlide} />
             </div>
           </div>
