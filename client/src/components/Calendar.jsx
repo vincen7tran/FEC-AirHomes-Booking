@@ -195,7 +195,7 @@ const SelectedDay = style.td`
   background: rgb(0, 166, 153);
 `;
 
-const bookHoverStyle = style.td`
+const HoverDay = style.td`
   display: table-cell;
   box-sizing: border-box;
   width: 39px;
@@ -338,6 +338,7 @@ class Calendar extends React.Component {
       currentDateObj: moment(),
       dateObj: moment(),
       bookStartDate: null,
+      bookFinalAvail: null,
       bookDates: [],
       bookHoverDates: [],
       minNightBlackoutDates: [],
@@ -349,6 +350,7 @@ class Calendar extends React.Component {
     this.setState(prevState => ({ bookStartDate: id, bookDates: [...prevState.bookDates, id] }),
       () => {
         this.minNightBlackout(id);
+        this.findFinalAvail(id);
       });
   }
 
@@ -385,7 +387,17 @@ class Calendar extends React.Component {
     this.setState({ minNightBlackoutDates });
   };
 
-  onClearButton = () => this.setState({ bookStartDate: null, bookDates: [], minNightBlackoutDates: [] });
+  findFinalAvail = (id) => {
+    let bookFinalAvail = id;
+    const { bookings } = this.props;
+
+    while (!bookings.includes(bookFinalAvail)) {
+      bookFinalAvail = moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+    }
+    this.setState({ bookFinalAvail });
+  }
+
+  onClearButton = () => this.setState({ bookStartDate: null, bookFinalAvail: null, bookDates: [], minNightBlackoutDates: [] });
 
   setMonth = (next) => {
     const { dateObj } = this.state;
@@ -416,7 +428,7 @@ class Calendar extends React.Component {
   createDays = () => {
     const days = [];
     const {
-      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates,
+      dateObj, currentDateObj, bookStartDate, minNightBlackoutDates, bookHoverDates, bookFinalAvail,
     } = this.state;
     const { bookings, finalDate, minNights } = this.props;
     const setMonth = dateObj.format('MM');
@@ -432,8 +444,9 @@ class Calendar extends React.Component {
     let finalMonth;
     let finalDay;
 
-    if (finalDate) {
-      const finalSplit = finalDate.split('-');
+    if (finalDate || bookFinalAvail) {
+      const useThisDate = bookFinalAvail || finalDate;
+      const finalSplit = useThisDate.split('-');
       [finalYear, finalMonth, finalDay] = finalSplit;
       finalYear = parseInt(finalYear);
       finalMonth = parseInt(finalMonth);
@@ -461,6 +474,16 @@ class Calendar extends React.Component {
               </div>
             </div>
           </SelectedDay>
+        );
+      } else if (bookHoverDates.includes(dayId)) {
+        days.push(
+          <HoverDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={bookStartDate ? this.onHoverBook : ()=>{}} onMouseLeave={bookStartDate ? this.onHoverLeave : ()=>{}}>
+            <div style={dayDiv}>
+              <div style={dayPadding}>
+                <div style={dayText}>{day}</div>
+              </div>
+            </div>
+          </HoverDay>
         );
       } else if (
         blackout
