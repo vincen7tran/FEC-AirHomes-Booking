@@ -548,7 +548,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calTwo = node; }}>
                 {
                 checkoutActive && (
-                <Calendar bookStartDate={bookStartDate} dateObj={dateObj} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar bookStartDate={bookStartDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
             </div>
