@@ -239,7 +239,7 @@ class CheckingForm extends React.Component {
 
   onDayClick = (e) => {
     const { bookStartDate, bookFinalDate, checkInActive, checkoutActive } = this.state;
-    const { minNights } = this.props;
+    const { minNights, bookings } = this.props;
 
     const { id } = e.currentTarget;
     if (checkInActive) {
@@ -281,9 +281,8 @@ class CheckingForm extends React.Component {
         }
         if (moment(id).isBefore(bookStartDate)) {
           this.setState({ bookFinalDate: null }, () => {
-            this.onClearButton(() => {
-              this.updateBookStartDate(id);
-            });
+            this.onClearButton();
+            this.updateBookStartDate(id);
           });
         } else {
           this.updateBookFinalDate(id);
@@ -487,8 +486,9 @@ class CheckingForm extends React.Component {
       initYear = parseInt(currentDateObj.format('YYYY'));
       initDay = parseInt(currentDateObj.format('DD'));
     }
-
-    if (bookFinalDate && !bookStartDate) {
+    if (bookFinalDate && bookStartDate && calId === "checkout") {
+      finalSplit = bookFinalDate.split('-');
+    } else if (bookFinalDate && !bookStartDate) {
       finalSplit = finalDate.split('-');
       if (bookFinalAvail) {
         const availSplit = bookFinalAvail.split('-');
