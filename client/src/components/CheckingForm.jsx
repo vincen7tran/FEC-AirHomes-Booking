@@ -238,18 +238,25 @@ class CheckingForm extends React.Component {
   }
 
   onDayClick = (e) => {
-    const { bookStartDate, bookFinalDate, checkInActive, checkoutActive } = this.state;
+    const {
+      bookStartDate,
+      bookFinalDate,
+      checkInActive,
+      checkoutActive
+    } = this.state;
     const { minNights, bookings } = this.props;
-
     const { id } = e.currentTarget;
+
     if (checkInActive) {
       if (!bookStartDate && bookFinalDate) {
         let checkId = id;
-        for (let i = 1; i < minNights; i++) {
-          if (checkId === bookFinalDate) return;
-          checkId = moment(checkId).add(1, 'days').format('YYYY-MM-DD');
-        }
-        if (moment(id).isAfter(bookFinalDate)) {
+        if (moment(checkId).isBefore(bookFinalDate)) {
+          while (checkId !== bookFinalDate) {
+            if (bookings.includes(checkId)) return;
+            checkId = moment(checkId).add(1, 'days').format('YYYY-MM-DD');
+          }
+          this.updateBookStartDate(id);
+        } else if (moment(id).isAfter(bookFinalDate)) {
           this.setState({ bookFinalDate: null }, () => {
             this.onClearButton();
             this.updateBookStartDate(id);
@@ -295,7 +302,6 @@ class CheckingForm extends React.Component {
 
   updateBookFinalDate = (id) => {
     const { getBookedDates } = this.props;
-
     this.setState({ bookFinalDate: id },
       () => {
         const { bookStartDate, bookFinalDate } = this.state;
@@ -377,20 +383,18 @@ class CheckingForm extends React.Component {
       const blackoutDay = isCalOne ? moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(id, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
       minNightBlackoutDates.push(blackoutDay);
     }
-
     this.setState({ minNightBlackoutDates });
   };
 
   findFinalAvail = (id, isCalOne) => {
     let bookFinalAvail = id;
     const { currentDateObj } = this.state;
-    const { bookings } = this.props;
     const currentDate = currentDateObj.format('YYYY-MM-DD');
+    const { bookings, finalDate } = this.props;
 
-    while (isCalOne ? !bookings.includes(bookFinalAvail) : currentDate !== bookFinalAvail) {
+    while (!bookings.includes(bookFinalAvail) && (isCalOne ? bookFinalAvail !== finalDate : bookFinalAvail !== currentDate)) {
       bookFinalAvail = isCalOne ? moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD') : moment(bookFinalAvail, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
     }
-
     this.setState({ bookFinalAvail });
   }
 
@@ -450,6 +454,7 @@ class CheckingForm extends React.Component {
     return blanks;
   }
 
+
   createDays = (calId) => {
     const days = [];
     const {
@@ -476,17 +481,24 @@ class CheckingForm extends React.Component {
     let initYear;
     let initMonth;
     let initDay;
+    let initPadding;
 
     if ((bookStartDate && !bookFinalDate) || (bookStartDate && calId === 'checkout')) {
       initMonth = parseInt(moment(bookStartDate).format('MM'));
       initYear = parseInt(moment(bookStartDate).format('YYYY'));
       initDay = parseInt(moment(bookStartDate).format('DD'));
+    } else if (calId === 'checkout' && !bookStartDate && !bookFinalDate) {
+      initPadding = moment(currentDateObj).add(minNights - 1, 'days');
+      initMonth = parseInt(initPadding.format('MM'));
+      initYear = parseInt(initPadding.format('YYYY'));
+      initDay = parseInt(initPadding.format('DD'));
     } else {
       initMonth = parseInt(currentDateObj.format('MM'));
       initYear = parseInt(currentDateObj.format('YYYY'));
       initDay = parseInt(currentDateObj.format('DD'));
     }
-    if (bookFinalDate && bookStartDate && calId === "checkout") {
+
+    if (bookFinalDate && bookStartDate && calId === 'checkout') {
       finalSplit = bookFinalDate.split('-');
     } else if (bookFinalDate && !bookStartDate) {
       finalSplit = finalDate.split('-');
