@@ -243,9 +243,7 @@ class CheckingForm extends React.Component {
 
     const { id } = e.currentTarget;
     if (checkInActive) {
-      console.log('qqq')
       if (!bookStartDate && bookFinalDate) {
-        console.log('23423')
         let checkId = id;
         for (let i = 1; i < minNights; i++) {
           if (checkId === bookFinalDate) return;
@@ -260,7 +258,6 @@ class CheckingForm extends React.Component {
           this.updateBookStartDate(id);
         }
       } else if (bookStartDate && bookFinalDate) {
-        console.log(1111);
         this.setState({
           bookStartDate: null,
           bookFinalDate: null,
@@ -276,7 +273,6 @@ class CheckingForm extends React.Component {
         this.updateBookStartDate(id);
       }
     } else if (checkoutActive) {
-      console.log('outoutout');
       if (bookStartDate) {
         let checkId = id;
         for (let i = 1; i < minNights; i++) {
