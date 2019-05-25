@@ -243,7 +243,9 @@ class CheckingForm extends React.Component {
 
     const { id } = e.currentTarget;
     if (checkInActive) {
-      if (bookFinalDate) {
+      console.log('qqq')
+      if (!bookStartDate && bookFinalDate) {
+        console.log('23423')
         let checkId = id;
         for (let i = 1; i < minNights; i++) {
           if (checkId === bookFinalDate) return;
@@ -257,18 +259,42 @@ class CheckingForm extends React.Component {
         } else {
           this.updateBookStartDate(id);
         }
+      } else if (bookStartDate && bookFinalDate) {
+        console.log(1111);
+        this.setState({
+          bookStartDate: null,
+          bookFinalDate: null,
+          bookFinalAvail: null,
+          bookDates: [],
+          minNightBlackoutDates: [],
+          bookHoverDates: [],
+        },
+        () => {
+          this.updateBookStartDate(id);
+        });
       } else {
         this.updateBookStartDate(id);
       }
     } else if (checkoutActive) {
+      console.log('outoutout');
       if (bookStartDate) {
         let checkId = id;
         for (let i = 1; i < minNights; i++) {
           if (checkId === bookStartDate) return;
           checkId = moment(checkId).subtract(1, 'days').format('YYYY-MM-DD');
         }
+        if (moment(id).isBefore(bookStartDate)) {
+          this.setState({ bookFinalDate: null }, () => {
+            this.onClearButton(() => {
+              this.updateBookStartDate(id);
+            });
+          });
+        } else {
+          this.updateBookFinalDate(id);
+        }
+      } else {
+        this.updateBookFinalDate(id);
       }
-      this.updateBookFinalDate(id);
     }
   }
 
@@ -313,6 +339,8 @@ class CheckingForm extends React.Component {
     const { minNights } = this.props;
     const { bookStartDate, bookFinalDate } = this.state;
     const bookHoverDates = [];
+
+    if (bookStartDate && bookFinalDate) return;
 
     if (bookStartDate) {
       if (id === bookStartDate) {
@@ -444,15 +472,25 @@ class CheckingForm extends React.Component {
     const setMonthInt = parseInt(setMonth);
     const setYear = dateObj.format('YYYY');
     const setYearInt = parseInt(setYear);
-    let initMonth = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('MM')) : parseInt(currentDateObj.format('MM'));
-    let initYear = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('YYYY')) : parseInt(currentDateObj.format('YYYY'));
-    let initDay = bookStartDate ? parseInt(moment(bookStartDate, 'YYYY-MM-DD').format('DD')) : parseInt(currentDateObj.format('DD'));
     const yearId = dateObj.format('YYYY');
     const monthId = dateObj.format('MM');
     let finalYear;
     let finalMonth;
     let finalDay;
     let finalSplit;
+    let initYear;
+    let initMonth;
+    let initDay;
+
+    if ((bookStartDate && !bookFinalDate) || (bookStartDate && calId === 'checkout')) {
+      initMonth = parseInt(moment(bookStartDate).format('MM'));
+      initYear = parseInt(moment(bookStartDate).format('YYYY'));
+      initDay = parseInt(moment(bookStartDate).format('DD'));
+    } else {
+      initMonth = parseInt(currentDateObj.format('MM'));
+      initYear = parseInt(currentDateObj.format('YYYY'));
+      initDay = parseInt(currentDateObj.format('DD'));
+    }
 
     if (bookFinalDate && !bookStartDate) {
       finalSplit = finalDate.split('-');
