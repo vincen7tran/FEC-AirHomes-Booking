@@ -238,18 +238,36 @@ class CheckingForm extends React.Component {
   }
 
   onDayClick = (e) => {
-    const { bookFinalDate, checkInActive, checkoutActive } = this.state;
-    const { id } = e.currentTarget;
+    const { bookStartDate, bookFinalDate, checkInActive, checkoutActive } = this.state;
+    const { minNights } = this.props;
 
+    const { id } = e.currentTarget;
     if (checkInActive) {
       if (bookFinalDate) {
+        let checkId = id;
+        for (let i = 1; i < minNights; i++) {
+          if (checkId === bookFinalDate) return;
+          checkId = moment(checkId).add(1, 'days').format('YYYY-MM-DD');
+        }
         if (moment(id).isAfter(bookFinalDate)) {
-          this.setState({ bookFinalDate: null }, () => this.updateBookStartDate(id));
+          this.setState({ bookFinalDate: null }, () => {
+            this.onClearButton();
+            this.updateBookStartDate(id);
+          });
+        } else {
+          this.updateBookStartDate(id);
         }
       } else {
         this.updateBookStartDate(id);
       }
     } else if (checkoutActive) {
+      if (bookStartDate) {
+        let checkId = id;
+        for (let i = 1; i < minNights; i++) {
+          if (checkId === bookStartDate) return;
+          checkId = moment(checkId).subtract(1, 'days').format('YYYY-MM-DD');
+        }
+      }
       this.updateBookFinalDate(id);
     }
   }
@@ -363,7 +381,7 @@ class CheckingForm extends React.Component {
       id = moment(id, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
     }
 
-    this.setState({ bookDates }, () => {
+    this.setState({ bookDates, bookFinalAvail: null }, () => {
       this.closeModal();
     });
   }
@@ -461,16 +479,14 @@ class CheckingForm extends React.Component {
       if (bookings) {
         blackout = bookings.includes(dayId);
       }
-      if (!bookStartDate && !bookFinalDate) {
-        for (let i = 1; i < minNights; i++) {
-          const checkDay = calId === 'checkIn' ? moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(dayId, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
+      for (let i = 1; i < minNights; i++) {
+        const checkDay = calId === 'checkIn' ? moment(dayId, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(dayId, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
 
-          if (bookings.includes(checkDay)) blackout = true;
-        }
+        if (bookings.includes(checkDay)) blackout = true;
       }
       if (dayId === bookStartDate || bookDates.includes(dayId) || dayId === bookFinalDate) {
         days.push(
-          <SelectedDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
+          <SelectedDay id={dayId} key={day} onClick={blackout ? ()=>{} : this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
