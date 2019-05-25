@@ -510,6 +510,8 @@ class CheckingForm extends React.Component {
     } else if (calId === 'checkIn' && !bookStartDate && !bookFinalDate) {
       finalPadding = moment(finalDate, 'YYYY-MM-DD').subtract(minNights - 1, 'days').format('YYYY-MM-DD');
       finalSplit = finalPadding.split('-');
+    } else if (calId === 'checkIn' && bookStartDate && !bookFinalDate) {
+      finalSplit = finalDate.split('-');
     } else if (bookFinalDate && !bookStartDate) {
       finalSplit = finalDate.split('-');
       if (bookFinalAvail) {
