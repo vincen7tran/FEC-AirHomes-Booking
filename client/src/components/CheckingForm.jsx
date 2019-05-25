@@ -377,7 +377,7 @@ class CheckingForm extends React.Component {
 
   minNightBlackout = (id, isCalOne) => {
     const { minNights } = this.props;
-    const minNightBlackoutDates = [];
+    const minNightBlackoutDates = minNights === 1 ? [] : [id];
 
     for (let i = 1; i < minNights - 1; i++) {
       const blackoutDay = isCalOne ? moment(id, 'YYYY-MM-DD').add(i, 'days').format('YYYY-MM-DD') : moment(id, 'YYYY-MM-DD').subtract(i, 'days').format('YYYY-MM-DD');
@@ -477,6 +477,7 @@ class CheckingForm extends React.Component {
     let finalYear;
     let finalMonth;
     let finalDay;
+    let finalPadding;
     let finalSplit;
     let initYear;
     let initMonth;
@@ -500,6 +501,9 @@ class CheckingForm extends React.Component {
 
     if (bookFinalDate && bookStartDate && calId === 'checkout') {
       finalSplit = bookFinalDate.split('-');
+    } else if (calId === 'checkIn' && !bookStartDate && !bookFinalDate) {
+      finalPadding = moment(finalDate, 'YYYY-MM-DD').subtract(minNights - 1, 'days').format('YYYY-MM-DD');
+      finalSplit = finalPadding.split('-');
     } else if (bookFinalDate && !bookStartDate) {
       finalSplit = finalDate.split('-');
       if (bookFinalAvail) {
@@ -530,6 +534,7 @@ class CheckingForm extends React.Component {
 
         if (bookings.includes(checkDay)) blackout = true;
       }
+      if (minNightBlackoutDates.includes(dayId)) blackout = true;
       if (dayId === bookStartDate || bookDates.includes(dayId) || dayId === bookFinalDate) {
         days.push(
           <SelectedDay id={dayId} key={day} onClick={blackout ? ()=>{} : this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
@@ -552,7 +557,6 @@ class CheckingForm extends React.Component {
         );
       } else if (
         blackout
-        || minNightBlackoutDates.includes(dayId)
         || setYearInt < initYear
         || (setYearInt === initYear && setMonthInt < initMonth)
         || (setYearInt === initYear && setMonthInt === initMonth && day < initDay)
