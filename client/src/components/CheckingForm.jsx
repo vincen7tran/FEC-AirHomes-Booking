@@ -454,12 +454,11 @@ class CheckingForm extends React.Component {
     const blanks = [];
     for (let i = 0; i < this.getFirstDayOfMonth(); i++) {
       blanks.push(
-        <td style={blankStyle} />
+        <td key={i} style={blankStyle} />
       );
     }
     return blanks;
   }
-
 
   createDays = (calId) => {
     const days = [];
@@ -545,7 +544,7 @@ class CheckingForm extends React.Component {
       if (minNightBlackoutDates.includes(dayId)) blackout = true;
       if (dayId === bookStartDate || bookDates.includes(dayId) || dayId === bookFinalDate) {
         days.push(
-          <SelectedDay id={dayId} key={day} onClick={blackout ? ()=>{} : this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
+          <SelectedDay id={dayId} key={dayId} onClick={blackout ? ()=>{} : this.onDayClick} onMouseOver={this.onHoverBook} onMouseLeave={this.onHoverLeave}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -555,7 +554,7 @@ class CheckingForm extends React.Component {
         );
       } else if (bookHoverDates.includes(dayId)) {
         days.push(
-          <HoverDay id={dayId} key={day} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
+          <HoverDay id={dayId} key={dayId} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -573,7 +572,7 @@ class CheckingForm extends React.Component {
         || (setYearInt === finalYear && setMonthInt === finalMonth && day > finalDay)
       ) {
         days.push(
-          <td id={dayId} key={day} style={tdDayStyle}>
+          <td id={dayId} key={dayId} style={tdDayStyle}>
             <div style={blackoutDiv}>
               <div style={blackoutPadding}>
                 <div style={blackoutText}>{day}</div>
@@ -583,7 +582,7 @@ class CheckingForm extends React.Component {
         );
       } else {
         days.push(
-          <Day id={dayId} key={day} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
+          <Day id={dayId} key={dayId} onClick={this.onDayClick} onMouseOver={(bookStartDate || bookFinalDate) ? this.onHoverBook : ()=>{}} onMouseLeave={(bookStartDate || bookFinalDate) ? this.onHoverLeave : ()=>{}}>
             <div style={dayDiv}>
               <div style={dayPadding}>
                 <div style={dayText}>{day}</div>
@@ -614,7 +613,7 @@ class CheckingForm extends React.Component {
       if (i === totalSlots.length - 1) table.push(tableRow);
     });
 
-    const month = table.map(row => <tr>{row}</tr>);
+    const month = table.map((row, i) => <tr key={i}>{row}</tr>);
 
     return month;
   }

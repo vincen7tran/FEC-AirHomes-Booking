@@ -120,7 +120,7 @@ class App extends React.Component {
 
   render() {
     const { listing, hideSlide, hideReport, checkIn, checkout } = this.state;
-
+    
     return (
       <div style={body}>
         <div style={container}>
@@ -144,6 +144,10 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
+        <div>Listing Information</div>
+        <div>{`Mininum Nights Required: ${listing.minNights}`}</div>
+        <div>{`Final Date Available: ${listing.finalDay}`}</div>
+        <div>{`Booked Dates: ${listing.bookings}`}</div>
       </div>
     );
   }
