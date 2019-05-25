@@ -66,6 +66,7 @@ class App extends React.Component {
       listing: {},
       hideSlide: true,
       hideReport: true,
+      hideCosts: true,
       checkIn: 'Check-In',
       checkout: 'Checkout',
     };
@@ -83,7 +84,9 @@ class App extends React.Component {
   getBookedDates = (checkInDate, checkoutDate) => {
     const checkIn = checkInDate ? moment(checkInDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Check-In';
     const checkout = checkoutDate ? moment(checkoutDate, 'YYYY-MM-DD').format('MM/DD/YYYY') : 'Checkout';
-    this.setState({ checkIn, checkout });
+
+    if (checkInDate && checkoutDate) this.setState({ checkIn, checkout, hideCosts: false });
+    else this.setState({ checkIn, checkout, hideCosts: true });
   }
 
   onInputCheckInChange = (e) => {
@@ -119,7 +122,14 @@ class App extends React.Component {
   getListing = listingId => axios.get('/listing', { params: { listingId } });
 
   render() {
-    const { listing, hideSlide, hideReport, checkIn, checkout } = this.state;
+    const {
+      listing,
+      hideSlide,
+      hideReport,
+      hideCosts,
+      checkIn,
+      checkout
+    } = this.state;
     
     return (
       <div style={body}>
@@ -135,7 +145,7 @@ class App extends React.Component {
                   <StarRating stars={listing.averageRating} numberOfRatings={listing.numberOfRatings} onReviewsClick={this.onReviewsClick} />
                 </div>
               </div>
-              <Booking bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
+              <Booking hideCosts={hideCosts} baseRate={listing.baseRate} cleaningFee={listing.cleaningFee} serviceFee={listing.serviceFee} tax={listing.tax} bookings={listing.bookings} finalDate={listing.finalDay} minNights={listing.minNights} maxNights={listing.maxNights} getBookedDates={this.getBookedDates} maxGuests={listing.maxGuests} maxInfants={listing.maxInfants} checkIn={checkIn} checkout={checkout} onInputCheckInChange={this.onInputCheckInChange} onInputCheckoutChange={this.onInputCheckoutChange} />
               <Slider hidden={hideSlide} />
             </div>
           </div>
