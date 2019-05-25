@@ -25,7 +25,7 @@ const textSpan = {
   margin: '0',
   wordWrap: 'break-word',
   fontSize: '14px',
-  fontWeight: '400',
+  fontWeight: '200',
   lineHeight: '1.2857em',
   color: '#484848',
 };
@@ -67,7 +67,7 @@ const costSpan = {
   margin: '0',
   wordWrap: 'break-word',
   fontSize: '14px',
-  fontWeight: '400',
+  fontWeight: '200',
   lineHeight: '1.2857em',
   color: '#484848',
 };
@@ -93,8 +93,10 @@ const CostLineItem = (props) => {
       <div style={table}>
         <div style={textCell}>
           <span style={textSpan}>
-            {description === 'baseRate' && <span>{`$${cost} X ${duration} nights`}</span>}
-            {description !== 'baseRate' && <span>{`${description}`}</span>}
+            {description === 'baseRate' && <span>{`$${cost} x ${duration} nights`}</span>}
+            {description === 'cleaningFee' && <span>Cleaning fee</span>}
+            {description === 'serviceFee' && <span>Service fee</span>}
+            {description === 'tax' && <span>Tax</span>}
           </span>
           <div style={infoDiv}>
             <div style={infoRelative}>
@@ -106,7 +108,7 @@ const CostLineItem = (props) => {
         </div>
         <div style={costCell}>
           <span style={costSpan}>
-            <span style={costInnerSpan}>$92349204</span>
+            <span style={costInnerSpan}>{`$${cost}`}</span>
           </span>
         </div>
       </div>
