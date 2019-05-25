@@ -248,7 +248,6 @@ class CheckingForm extends React.Component {
     const { id } = e.currentTarget;
 
     if (checkInActive) {
-      console.log(1);
       if (!bookStartDate && bookFinalDate) {
         let checkId = id;
         if (moment(checkId).isBefore(bookFinalDate)) {
@@ -278,7 +277,6 @@ class CheckingForm extends React.Component {
           this.updateBookStartDate(id);
         });
       } else if (bookStartDate) {
-        console.log(2);
         this.setState({ bookStartDate: null }, () => {
           this.onClearButton();
           this.updateBookStartDate(id);
@@ -491,7 +489,7 @@ class CheckingForm extends React.Component {
     let initMonth;
     let initDay;
     let initPadding;
-    console.log('Min Nights', minNights);
+
     if ((bookStartDate && calId === 'checkout')) {
       initMonth = parseInt(moment(bookStartDate).format('MM'));
       initYear = parseInt(moment(bookStartDate).format('YYYY'));
