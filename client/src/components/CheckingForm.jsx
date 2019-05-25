@@ -398,7 +398,9 @@ class CheckingForm extends React.Component {
     const currentDate = currentDateObj.format('YYYY-MM-DD');
     const { bookings, finalDate } = this.props;
 
-    while (!bookings.includes(bookFinalAvail) && (isCalOne ? bookFinalAvail !== finalDate : bookFinalAvail !== currentDate)) {
+    while (
+      !bookings.includes(bookFinalAvail)
+      && (isCalOne ? bookFinalAvail !== finalDate : bookFinalAvail !== currentDate)) {
       bookFinalAvail = isCalOne ? moment(bookFinalAvail, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD') : moment(bookFinalAvail, 'YYYY-MM-DD').subtract(1, 'days').format('YYYY-MM-DD');
     }
     this.setState({ bookFinalAvail });
