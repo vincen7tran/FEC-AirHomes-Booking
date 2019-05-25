@@ -248,6 +248,7 @@ class CheckingForm extends React.Component {
     const { id } = e.currentTarget;
 
     if (checkInActive) {
+      console.log(1);
       if (!bookStartDate && bookFinalDate) {
         let checkId = id;
         if (moment(checkId).isBefore(bookFinalDate)) {
@@ -274,6 +275,12 @@ class CheckingForm extends React.Component {
           bookHoverDates: [],
         },
         () => {
+          this.updateBookStartDate(id);
+        });
+      } else if (bookStartDate) {
+        console.log(2);
+        this.setState({ bookStartDate: null }, () => {
+          this.onClearButton();
           this.updateBookStartDate(id);
         });
       } else {
@@ -342,6 +349,7 @@ class CheckingForm extends React.Component {
     const bookHoverDates = [];
 
     if (bookStartDate && bookFinalDate) return;
+    if (bookStartDate && moment(id, 'YYYY-MM-DD').isBefore(bookStartDate)) return;
 
     if (bookStartDate) {
       if (id === bookStartDate) {
@@ -483,8 +491,8 @@ class CheckingForm extends React.Component {
     let initMonth;
     let initDay;
     let initPadding;
-
-    if ((bookStartDate && !bookFinalDate) || (bookStartDate && calId === 'checkout')) {
+    console.log('Min Nights', minNights);
+    if ((bookStartDate && calId === 'checkout')) {
       initMonth = parseInt(moment(bookStartDate).format('MM'));
       initYear = parseInt(moment(bookStartDate).format('YYYY'));
       initDay = parseInt(moment(bookStartDate).format('DD'));
