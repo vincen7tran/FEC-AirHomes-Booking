@@ -208,7 +208,15 @@ const questionPadding = {
 };
 
 const Calendar = (props) => {
-  const { dateObj, bookStartDate, bookFinalDate, setMonth, createTable, onClearButton, calId } = props;
+  const {
+    dateObj,
+    bookStartDate,
+    bookFinalDate,
+    setMonth,
+    createTable,
+    onClearButton,
+    calId,
+  } = props;
   const currentMonth = dateObj.format('MMMM');
   const currentYear = dateObj.format('YYYY');
 
