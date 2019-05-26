@@ -219,6 +219,7 @@ const Calendar = (props) => {
     calId,
     hideShortcuts,
     onQuestionClick,
+    onCloseShortcuts
   } = props;
   const currentMonth = dateObj.format('MMMM');
   const currentYear = dateObj.format('YYYY');
@@ -286,7 +287,7 @@ const Calendar = (props) => {
               <span style={questionText}>?</span>
             </QuestionButton>
             {
-              !hideShortcuts && <CalendarShortcuts />
+              !hideShortcuts && <CalendarShortcuts onCloseShortcuts={onCloseShortcuts} />
             }
           </div>
         </div>

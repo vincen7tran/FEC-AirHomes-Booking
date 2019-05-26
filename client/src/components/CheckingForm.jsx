@@ -384,6 +384,8 @@ class CheckingForm extends React.Component {
 
   onQuestionClick = () => this.setState({ hideShortcuts: false });
 
+  onCloseShortcuts = () => this.setState({ hideShortcuts: true });
+
   minNightBlackout = (id, isCalOne) => {
     const { minNights } = this.props;
     const minNightBlackoutDates = minNights === 1 ? [] : [id];
@@ -670,7 +672,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calOne = node; }}>
                 {
                 checkInActive && (
-                <Calendar calId="checkIn" onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkIn" onCloseShortcuts={this.onCloseShortcuts} onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
               <div style={arrowContainer}>
@@ -694,7 +696,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calTwo = node; }}>
                 {
                 checkoutActive && (
-                <Calendar calId="checkout" onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkout" onCloseShortcuts={this.onCloseShortcuts} onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
             </div>
