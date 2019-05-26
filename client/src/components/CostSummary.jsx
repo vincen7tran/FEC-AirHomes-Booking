@@ -42,7 +42,7 @@ const CostSummary = (props) => {
   const grandTotal = (baseRate * duration + cleaningFee + serviceFee + tax).toLocaleString();
   const lineItems = Object.keys(props).map((lineItem) => {
     if (!exclude.includes(lineItem) && props[lineItem]) {
-      return <CostLineItem key={lineItem} duration={duration} description={lineItem} cost={props[lineItem].toLocaleString()} />
+      return <CostLineItem key={lineItem} duration={duration} description={lineItem} cost={props[lineItem]} />
     }
   });
 

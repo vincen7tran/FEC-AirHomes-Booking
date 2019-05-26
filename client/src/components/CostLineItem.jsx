@@ -86,14 +86,17 @@ const borderDiv = {
 };
 
 const CostLineItem = (props) => {
-  const { description, cost, duration } = props;
+  const { description, duration } = props;
+  let { cost } = props;
+
+  if (description === 'baseRate') cost *= duration;
 
   return (
     <div style={container}>
       <div style={table}>
         <div style={textCell}>
           <span style={textSpan}>
-            {description === 'baseRate' && <span>{`$${cost} x ${duration} nights`}</span>}
+            {description === 'baseRate' && <span>{`$${cost.toLocaleString()} x ${duration} nights`}</span>}
             {description === 'cleaningFee' && <span>Cleaning fee</span>}
             {description === 'serviceFee' && <span>Service fee</span>}
             {description === 'tax' && <span>Tax</span>}
@@ -108,7 +111,7 @@ const CostLineItem = (props) => {
         </div>
         <div style={costCell}>
           <span style={costSpan}>
-            <span style={costInnerSpan}>{`$${cost}`}</span>
+            <span style={costInnerSpan}>{`$${cost.toLocaleString()}`}</span>
           </span>
         </div>
       </div>

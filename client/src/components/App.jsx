@@ -45,13 +45,14 @@ const reviewContainer = {
 
 const baseRate = {
   fontSize: '22px',
-  fontWeight: '800',
+  fontWeight: '700',
   lineHeight: '1.444444em',
 };
 
 const font12 = {
   fontSize: '12px',
   marginLeft: '3px',
+  fontWeight: '400',
 };
 
 const container = {
@@ -131,6 +132,8 @@ class App extends React.Component {
       checkout
     } = this.state;
     
+    if (listing.baseRate) listing.baseRate = listing.baseRate.toLocaleString();
+
     return (
       <div style={body}>
         <div style={container}>
