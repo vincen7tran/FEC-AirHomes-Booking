@@ -230,6 +230,7 @@ class CheckingForm extends React.Component {
       bookDates: [],
       bookHoverDates: [],
       minNightBlackoutDates: [],
+      hideShortcuts: true,
     };
   }
 
@@ -380,6 +381,8 @@ class CheckingForm extends React.Component {
   }
 
   onHoverLeave = () => this.setState({ bookHoverDates: [] });
+
+  onQuestionClick = () => this.setState({ hideShortcuts: false });
 
   minNightBlackout = (id, isCalOne) => {
     const { minNights } = this.props;
@@ -640,7 +643,7 @@ class CheckingForm extends React.Component {
   }
 
   render() {
-    const { checkInActive, checkoutActive, dateObj, bookStartDate, bookFinalDate } = this.state;
+    const { checkInActive, checkoutActive, dateObj, bookStartDate, bookFinalDate, hideShortcuts } = this.state;
     const { checkIn, checkout, onInputCheckInChange, onInputCheckoutChange, bookings, finalDate, minNights, maxNights, getBookedDates } = this.props;
 
     return (
@@ -667,7 +670,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calOne = node; }}>
                 {
                 checkInActive && (
-                <Calendar calId="checkIn" bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkIn" onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
               <div style={arrowContainer}>
@@ -691,7 +694,7 @@ class CheckingForm extends React.Component {
               <div ref={(node) => { this.calTwo = node; }}>
                 {
                 checkoutActive && (
-                <Calendar calId="checkout" bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
+                <Calendar calId="checkout" onQuestionClick={this.onQuestionClick} hideShortcuts={hideShortcuts} bookStartDate={bookStartDate} bookFinalDate={bookFinalDate} dateObj={dateObj} setMonth={this.setMonth} onClearButton={this.onClearButton} createTable={this.createTable} bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} />
                 )}
               </div>
             </div>
