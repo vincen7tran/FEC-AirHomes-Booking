@@ -50,6 +50,7 @@ const ulStyle = {
 const liStyle = {
   listStyle: 'none',
   margin: '6px 0',
+  minHeight: '20px',
 };
 
 const iconDiv = {
