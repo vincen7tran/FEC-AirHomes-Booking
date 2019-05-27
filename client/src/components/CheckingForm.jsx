@@ -29,7 +29,7 @@ const checkingRow = {
 
 const font12 = {
   fontSize: '12px',
-  fontWeight: '600',
+  fontWeight: '500',
   lineHeight: '1.33333em',
   margin: '0',
   paddingBottom: '4px',
@@ -98,6 +98,7 @@ const inactiveText = {
   whiteSpace: 'nowrap',
   padding: '0 6px',
   overflow: 'hidden',
+  fontWeight: '300',
 };
 
 const activeText = {
@@ -108,6 +109,7 @@ const activeText = {
   background: 'rgb(153, 237, 230)',
   borderColor: 'rgb(153, 237, 230)',
   borderRadius: '3px',
+  fontWeight: '300',
 };
 
 const blankStyle = {

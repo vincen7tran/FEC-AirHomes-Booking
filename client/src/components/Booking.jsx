@@ -1,6 +1,11 @@
 import React from 'react';
 import CheckingForm from './CheckingForm.jsx';
 import GuestForm from './GuestForm.jsx';
+import CostSummary from './CostSummary.jsx';
+
+const formStyle = {
+  marginBottom: '0',
+};
 
 const bookingForm = {
   boxSizing: 'border-box',
@@ -57,14 +62,16 @@ class Booking extends React.Component {
     const {
       maxGuests, maxInfants, checkIn, checkout, onInputCheckInChange, onInputCheckoutChange,
       bookings, finalDate, minNights, maxNights, getBookedDates,
+      hideCosts, baseRate, cleaningFee, serviceFee, tax
     } = this.props;
 
     return (
-      <form action="">
+      <form style={formStyle} action="">
         <div style={bookingForm}>
           <CheckingForm bookings={bookings} finalDate={finalDate} minNights={minNights} maxNights={maxNights} getBookedDates={getBookedDates} checkIn={checkIn} checkout={checkout} onInputCheckInChange={onInputCheckInChange} onInputCheckoutChange={onInputCheckoutChange} />
           <GuestForm maxGuests={maxGuests} maxInfants={maxInfants} />
         </div>
+        {!hideCosts && <CostSummary checkIn={checkIn} checkout={checkout} baseRate={baseRate} cleaningFee={cleaningFee} serviceFee={serviceFee} tax={tax} />}
         <div style={buttonDiv}>
           <button type="submit" style={bookButton}>
             <div style={bookDiv}>Book</div>

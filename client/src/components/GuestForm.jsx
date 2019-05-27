@@ -7,7 +7,7 @@ const guestContainer = {
 
 const font12 = {
   fontSize: '12px',
-  fontWeight: '600',
+  fontWeight: '500',
   lineHeight: '1.33333em',
   margin: '0',
   paddingBottom: '4px',
@@ -51,7 +51,7 @@ const buttonMargin = {
 const buttonDiv = {
   margin: '0px',
   fontSize: '16px',
-  fontWeight: '400',
+  fontWeight: '300',
   lineHeight: '1.375em',
   color: '#484848',
 };
