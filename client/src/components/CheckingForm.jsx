@@ -637,11 +637,7 @@ class CheckingForm extends React.Component {
   }
 
   handleKeyPress = (e) => {
-    const { hideShortcuts } = this.props
 
-    if (hideShortcuts) return;
-    
-    if ()
   }
 
   closeModal = () => this.setState({ checkInActive: false, checkoutActive: false });

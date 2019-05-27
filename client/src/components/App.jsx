@@ -160,7 +160,6 @@ class App extends React.Component {
         <div>Listing Information</div>
         <div>{`Mininum Nights Required: ${listing.minNights}`}</div>
         <div>{`Final Date Available: ${listing.finalDay}`}</div>
-        <div>{`Booked Dates: ${listing.bookings}`}</div>
       </div>
     );
   }
