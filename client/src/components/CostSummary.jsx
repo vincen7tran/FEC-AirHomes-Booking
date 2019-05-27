@@ -33,13 +33,11 @@ const totalCell = {
   verticalAlign: 'middle',
 };
 
-
-
 const CostSummary = (props) => {
   const { checkIn, checkout, baseRate, cleaningFee, serviceFee, tax } = props;
   const exclude = ['checkIn', 'checkout'];
   const duration = moment(checkout, 'MM/DD/YYYY').diff(moment(checkIn, 'MM/DD/YYYY'), 'days');
-  const grandTotal = (baseRate * duration + cleaningFee + serviceFee + tax).toLocaleString();
+  const grandTotal = (parseInt(baseRate) * duration + cleaningFee + serviceFee + tax).toLocaleString();
   const lineItems = Object.keys(props).map((lineItem) => {
     if (!exclude.includes(lineItem) && props[lineItem]) {
       return <CostLineItem key={lineItem} duration={duration} description={lineItem} cost={props[lineItem]} />

@@ -87,9 +87,11 @@ const borderDiv = {
 
 const CostLineItem = (props) => {
   const { description, duration } = props;
+  let totalCost;
   let { cost } = props;
 
-  if (description === 'baseRate') cost *= duration;
+  cost = parseInt(cost);
+  if (description === 'baseRate') totalCost = cost * duration;
 
   return (
     <div style={container}>
@@ -111,7 +113,8 @@ const CostLineItem = (props) => {
         </div>
         <div style={costCell}>
           <span style={costSpan}>
-            <span style={costInnerSpan}>{`$${cost.toLocaleString()}`}</span>
+            {description === 'baseRate' && <span>{`$${totalCost.toLocaleString()}`}</span>}
+            {description !== 'baseRate' && <span>{`$${cost.toLocaleString()}`}</span>}
           </span>
         </div>
       </div>
