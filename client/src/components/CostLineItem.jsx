@@ -90,7 +90,7 @@ const CostLineItem = (props) => {
   let totalCost;
   let { cost } = props;
 
-  cost = parseInt(cost);
+  if (typeof cost === 'string') cost = parseInt(cost.split(',').join(''));
   if (description === 'baseRate') totalCost = cost * duration;
 
   return (
