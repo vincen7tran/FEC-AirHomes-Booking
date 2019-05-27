@@ -1,5 +1,6 @@
 import React from 'react';
 import style from 'styled-components';
+import CalendarShortcuts from './CalendarShortcuts.jsx';
 
 const calendarContainer = {
   zIndex: '1',
@@ -216,6 +217,9 @@ const Calendar = (props) => {
     createTable,
     onClearButton,
     calId,
+    hideShortcuts,
+    onQuestionClick,
+    onCloseShortcuts
   } = props;
   const currentMonth = dateObj.format('MMMM');
   const currentYear = dateObj.format('YYYY');
@@ -279,9 +283,12 @@ const Calendar = (props) => {
               <button type="button" style={clearButton} onClick={onClearButton}>Clear dates</button>
             </div>
             )}
-            <QuestionButton type="button">
+            <QuestionButton type="button" onClick={onQuestionClick}>
               <span style={questionText}>?</span>
             </QuestionButton>
+            {
+              !hideShortcuts && <CalendarShortcuts onCloseShortcuts={onCloseShortcuts} />
+            }
           </div>
         </div>
       </div>
