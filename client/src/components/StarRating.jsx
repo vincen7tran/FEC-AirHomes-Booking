@@ -42,7 +42,7 @@ const StarRating = (props) => {
   };
 
   return (
-    <StarContainer onClick={onReviewsClick}>
+    <StarContainer id="reviews" onClick={onReviewsClick}>
       <div style={backStars}>
         <i className="fa fa-star" />
         <i className="fa fa-star" />
@@ -57,7 +57,7 @@ const StarRating = (props) => {
           <i className="fa fa-star" />
         </div>
       </div>
-      <span style={font12}>{numberOfRatings}</span>
+      <span id="reviewNumber" style={font12}>{numberOfRatings}</span>
     </StarContainer>
   );
 };

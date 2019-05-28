@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import CheckingForm from '../client/src/components/CheckingForm.jsx';
 
-describe('Calendar Component Test Suite', () => {
+describe('CheckingForm Component Test Suite', () => {
   it('Should render correctly with no props', () => {
     const wrapper = shallow(<CheckingForm />);
     expect(wrapper).toMatchSnapshot();
