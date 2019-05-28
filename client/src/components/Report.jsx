@@ -47,7 +47,7 @@ const Report = (props) => {
   return (
     <div style={reportContainer}>
       <div title="Report this listing">
-        <button type="button" style={reportButton} onClick={onReportClick}>
+        <button id="reportButton" type="button" style={reportButton} onClick={onReportClick}>
           <div style={reportTable}>
             <div style={iconDiv}>
               <div style={iconPadding}>

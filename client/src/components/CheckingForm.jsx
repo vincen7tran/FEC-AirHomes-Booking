@@ -660,7 +660,7 @@ class CheckingForm extends React.Component {
         <div style={checkingDiv}>
           <div style={checkingForms}>
             <div style={checkingRow}>
-              <div style={checkingCell} onClick={e => this.openCheckInCalendar(e)}>
+              <div id="checkInCalDiv" style={checkingCell} onClick={e => this.openCheckInCalendar(e)}>
                 <div style={formDiv}>
                   <input style={checkForm} type="text" id="checkin" name="checkin" value={checkIn} onChange={(e) => onInputCheckInChange(e)} />
                   <div ref={(node) => { this.svgOne = node; }}>
@@ -684,7 +684,7 @@ class CheckingForm extends React.Component {
               <div style={arrowContainer}>
                 <svg viewBox="0 0 24 24" role="presentation" aria-hidden="true" focusable="false" style={arrow}><path d="m0 12.5a.5.5 0 0 0 .5.5h21.79l-6.15 6.15a.5.5 0 1 0 .71.71l7-7v-.01a.5.5 0 0 0 .14-.35.5.5 0 0 0 -.14-.35v-.01l-7-7a .5.5 0 0 0 -.71.71l6.15 6.15h-21.79a.5.5 0 0 0 -.5.5z" fillRule="evenodd" /></svg>
               </div>
-              <div style={checkingCell} onClick={e => this.openCheckoutCalendar(e)}>
+              <div id="checkoutCalDiv" style={checkingCell} onClick={e => this.openCheckoutCalendar(e)}>
                 <div style={formDiv}>
                   <input style={checkForm} type="text" id="checkout" name="checkout" value={checkout} onChange={e => onInputCheckoutChange(e)} />
                   <div ref={(node) => { this.svgTwo = node; }}>

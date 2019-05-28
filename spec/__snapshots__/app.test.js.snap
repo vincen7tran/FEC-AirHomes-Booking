@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App Component Test Suite Should be able to open guest form with a click 1`] = `ReactWrapper {}`;
+
+exports[`App Component Test Suite Should render correctly with no props 1`] = `ShallowWrapper {}`;

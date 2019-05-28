@@ -64,7 +64,7 @@ const Slider = (props) => {
   const { hidden } = props;
 
   return (
-    <div style={hidden ? hide : slide}>
+    <div id="slider" style={hidden ? hide : slide}>
       <div style={divMargin}>
         <div style={slideBorder} />
       </div>
