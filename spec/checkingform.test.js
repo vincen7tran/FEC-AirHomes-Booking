@@ -35,7 +35,7 @@ describe('Calendar Component Test Suite', () => {
       .simulate('click');
 
     expect(wrapper.state('checkInActive')).toEqual(true);
-    expect(wrapper.state('checkoutActive')).toBe(false);\
+    expect(wrapper.state('checkoutActive')).toBe(false);
     expect(wrapper).toMatchSnapshot();
   });
 });
