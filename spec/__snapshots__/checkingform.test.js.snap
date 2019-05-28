@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Calendar Component Test Suite Should be able to open the check-in Calendar from the checkout Calendar with a click 1`] = `ShallowWrapper {}`;
+
+exports[`Calendar Component Test Suite Should render correctly with no props 1`] = `ShallowWrapper {}`;

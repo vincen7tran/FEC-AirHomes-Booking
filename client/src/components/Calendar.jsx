@@ -225,7 +225,7 @@ const Calendar = (props) => {
   const currentYear = dateObj.format('YYYY');
 
   return (
-    <div style={calendarContainer}>
+    <div id={`${calId}Div`} style={calendarContainer}>
       <div style={calendarDiv}>
         <div style={daysContainer}>
           <div style={daysDiv}>
