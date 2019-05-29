@@ -59,7 +59,7 @@ const container = {
   marginLeft: '45px',
 };
 
-class App extends React.Component {
+class BookingApp extends React.Component {
   constructor(props) {
     super(props);
 
@@ -120,7 +120,7 @@ class App extends React.Component {
     }
   }
 
-  getListing = listingId => axios.get('/listing', { params: { listingId } });
+  getListing = listingId => axios.get('http://localhost:3002/listing', { params: { listingId } });
 
   render() {
     const {

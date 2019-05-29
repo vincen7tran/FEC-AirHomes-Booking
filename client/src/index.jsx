@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App.jsx';
+import BookingApp from './components/BookingApp.jsx';
 
-ReactDOM.render(<App />, document.getElementById('bookingApp'));
+ReactDOM.render(<BookingApp />, document.getElementById('bookingApp'));

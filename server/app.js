@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 app.get('/listing', async (req, res) => {
   const { listingId } = req.query;
-
+  console.log(1);
   try {
     const listing = await Listing.find({ listingId });
     res.send(listing);
