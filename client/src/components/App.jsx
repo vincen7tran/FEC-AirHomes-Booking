@@ -157,9 +157,9 @@ class App extends React.Component {
             {!hideReport && <ReportModal closeModal={this.closeReportModal} />}
           </div>
         </div>
-        <div>Listing Information</div>
+        {/* <div>Listing Information</div>
         <div>{`Mininum Nights Required: ${listing.minNights}`}</div>
-        <div>{`Final Date Available: ${listing.finalDay}`}</div>
+        <div>{`Final Date Available: ${listing.finalDay}`}</div> */}
       </div>
     );
   }
