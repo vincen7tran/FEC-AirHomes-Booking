@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 const Listing = require('../database/listing');
 require('../database/db');
 
@@ -9,7 +10,7 @@ const app = express();
 const distDir = path.join(__dirname, '/../public');
 
 app.use(express.static(distDir));
-
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/listing', async (req, res) => {
