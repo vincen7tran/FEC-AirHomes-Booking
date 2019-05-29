@@ -24,7 +24,10 @@ coverage
 build/
 dist/
 bundle.js
+bundleBooking.js
+vendor.js
 
 # MongoDB Credentials
 mongodb.config.js
+
 

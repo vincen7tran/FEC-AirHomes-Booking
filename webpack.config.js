@@ -5,15 +5,7 @@ const DIST_DIR = path.join(__dirname, '/public/');
 
 module.exports = {
   entry: {
-    vendor: ['styled-components'],
-    bundleBooking: `${SRC_DIR}/index.jsx`,
-  },
-  externals: {
-    'styled-components': {
-      commonjs: 'styled-components',
-      commonjs2: 'styled-components',
-      amd: 'styled-components',
-    },
+    bundle: `${SRC_DIR}/index.jsx`,
   },
   output: {
     filename: '[name].js',
@@ -30,11 +22,5 @@ module.exports = {
         },
       },
     ],
-  },
-  optimization: {
-    splitChunks: {
-      name: 'vendor',
-      minChunks: Infinity,
-    },
   },
 };
