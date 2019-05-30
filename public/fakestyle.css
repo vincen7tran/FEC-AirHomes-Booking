@@ -1,4 +1,4 @@
-.fakeBody {
+.gridBody {
   display: grid;
   grid-template-columns: 58.3% auto;
   grid-auto-rows: minmax(100px, auto);
