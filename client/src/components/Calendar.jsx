@@ -1,6 +1,6 @@
 import React from 'react';
-import style from 'styled-components';
 import CalendarShortcuts from './CalendarShortcuts.jsx';
+const styled = window.styled;
 
 const calendarContainer = {
   zIndex: '1',
@@ -146,7 +146,7 @@ const tbodyStyle = {
   borderColor: 'inherit',
 };
 
-const QuestionButton = style.button`
+const QuestionButton = styled.button`
   color: inherit;
   display: block;
   cursor: pointer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import style from 'styled-components';
+const styled = window.styled;
 import Calendar from './Calendar.jsx';
 
 const checking = {
@@ -132,7 +132,7 @@ const tdDayStyle = {
   background: '#fff',
 };
 
-const SelectedDay = style.td`
+const SelectedDay = styled.td`
   display: table-cell;
   box-sizing: border-box;
   width: 39px;
@@ -142,7 +142,7 @@ const SelectedDay = style.td`
   background: rgb(0, 166, 153);
 `;
 
-const HoverDay = style.td`
+const HoverDay = styled.td`
   display: table-cell;
   box-sizing: border-box;
   width: 39px;
@@ -152,7 +152,7 @@ const HoverDay = style.td`
   background: rgb(178, 241, 236);
 `;
 
-const Day = style.td`
+const Day = styled.td`
   display: table-cell;
   box-sizing: border-box;
   cursor: pointer;
