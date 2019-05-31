@@ -25,6 +25,7 @@ build/
 dist/
 bundleBooking.js
 vendor.js
+bundle.js
 
 # MongoDB Credentials
 mongodb.config.js
