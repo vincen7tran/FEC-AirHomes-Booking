@@ -110,7 +110,7 @@ class BookingApp extends React.Component {
   closeReportModal = () => { this.setState({ hideReport: true }); }
 
   handleScroll = () => {
-    const header = document.getElementById('photos');
+    const header = document.getElementById('photoDiv');
     const headerBottom = header.getBoundingClientRect().bottom;
 
     if (headerBottom < 0) {
