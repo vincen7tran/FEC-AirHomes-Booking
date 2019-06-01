@@ -105,12 +105,12 @@ class BookingApp extends React.Component {
 
   onReportClick = () => { this.setState({ hideReport: false }); }
 
-  onReviewsClick = () => { document.getElementById('reviewApp').scrollIntoView({ behavior: 'smooth' }); }
+  onReviewsClick = () => { document.getElementById('reviews').scrollIntoView({ behavior: 'smooth' }); }
 
   closeReportModal = () => { this.setState({ hideReport: true }); }
 
   handleScroll = () => {
-    const header = document.getElementById('photoApp');
+    const header = document.getElementById('photos');
     const headerBottom = header.getBoundingClientRect().bottom;
 
     if (headerBottom < 0) {
