@@ -129,9 +129,9 @@ class BookingApp extends React.Component {
       hideReport,
       hideCosts,
       checkIn,
-      checkout
+      checkout,
     } = this.state;
-    
+
     if (listing.baseRate) listing.baseRate = listing.baseRate.toLocaleString();
 
     return (
