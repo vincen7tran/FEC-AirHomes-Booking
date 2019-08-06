@@ -1,13 +1,6 @@
-# Project Name
+# AirHomes Booking Card Component
 
-> Project description
-
-## Related Projects
-
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+> The booking component of a Homestay Booking Application
 
 ## Table of Contents
 
