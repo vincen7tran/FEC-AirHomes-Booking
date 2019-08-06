@@ -10,7 +10,11 @@
 
 ## Usage
 
-> Some usage instructions
+> npm install
+> npm run react-dev to compile bundle
+> npm start to start server / mongo db
+> npm run seed
+> mongoimport --jsonArray seed file
 
 ## Requirements
 
