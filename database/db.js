@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const mongoURL = 'mongodb://database/airbnb-bookings';
-// const mongoURL = 'mongodb://localhost/airbnb-bookings';
+// const mongoURL = 'mongodb://database/airhomes-bookings';
+const mongoURL = 'mongodb://localhost/airhomes-bookings';
 
 mongoose.connect(mongoURL, {
-  dbName: 'airbnb-booking',
+  dbName: 'airhomes-booking',
   useNewUrlParser: true,
   useCreateIndex: true,
 }, (err) => {

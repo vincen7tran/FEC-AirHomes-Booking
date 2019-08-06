@@ -120,7 +120,8 @@ class BookingApp extends React.Component {
     }
   }
 
-  getListing = listingId => axios.get('http://ec2-18-188-197-64.us-east-2.compute.amazonaws.com/listing', { params: { listingId } });
+  // getListing = listingId => axios.get('http://ec2-18-188-197-64.us-east-2.compute.amazonaws.com/listing', { params: { listingId } });
+  getListing = listingId => axios.get('http://localhost:3002/listing', { params: { listingId } });
 
   render() {
     const {
